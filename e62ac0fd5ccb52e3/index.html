@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="build" content="31 Oct 2026, 18:25">
+<meta name="build" content="31 Oct 2026, 18:35">
 <meta name="theme-color" content="#0f766e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Options">
@@ -59,6 +59,15 @@ h1{font-size:22px;margin:4px 0 2px}
 details{margin:0 0 12px}
 summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:center}
 .key{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.runpanel label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.runpanel input,.runpanel select{width:100%;box-sizing:border-box;min-height:44px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);
+  background:var(--bg);color:var(--fg);font-size:16px;font-family:inherit}
+.runpanel .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.runpanel .go{width:100%;min-height:48px;margin-top:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:700;font-family:inherit}
+.runpanel .go[disabled]{opacity:.6}
+.runpanel .small{font-size:12.5px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+.runpanel .status{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--chip);font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.runpanel button.lnk{background:none;border:0;color:var(--accent);font-size:13px;font-weight:600;padding:6px 0;font-family:inherit}
 .runlink{display:inline-block;margin:-6px 0 12px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
 .secs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .secs::-webkit-scrollbar{display:none}
@@ -96,7 +105,10 @@ h2{font-size:17px;margin:18px 2px 8px}
 <body>
 <h1>Options picks</h1>
 <p class="sub" id="sub"></p>
-<a class="runlink" id="runLink" style="display:none" rel="noopener">Run a new screen &rarr;</a>
+<details class="card runpanel" id="runPanel" style="display:none">
+  <summary>Run a new screen</summary>
+  <div id="runBody"></div>
+</details>
 
 <div class="seg" role="group" aria-label="Option type">
   <button id="bCalls" aria-pressed="true">Calls</button>
@@ -151,7 +163,7 @@ h2{font-size:17px;margin:18px 2px 8px}
 
 <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
 <script>
-const DATA = {"calls":[],"puts":[],"meta":{"generated":"31 Oct 2026, 18:25","runUrl":"https://github.com/hackerman3102/stock-page/issues/new?template=run-request.yml","expiry":""},"base":"","current":"20261031-182520"};
+const DATA = {"calls":[{"s":"ITC","k":"280CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":33.96,"p":265.6,"d":5.42,"pr":1.65,"pp":0.62,"av":25.6,"iv":21.98,"ch":0.2,"pe":16.45,"hi":426.4,"lo":252.8,"cap":3328.0,"pv":2.0,"rank":1,"ratio":1.165},{"s":"ITC","k":"277.5CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":34.875,"p":265.6,"d":4.48,"pr":2.05,"pp":0.77,"av":25.6,"iv":21.42,"ch":0.2,"pe":16.45,"hi":426.4,"lo":252.8,"cap":3328.0,"pv":2.0,"rank":2,"ratio":1.195},{"s":"BSE","k":"3650CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":45.907,"p":3510.4,"d":3.98,"pr":79.1,"pp":2.25,"av":50.44,"iv":36.15,"ch":0.2,"pe":50.62,"hi":4446.8,"lo":2326.1,"cap":1432.0,"pv":1.7,"rank":3,"ratio":1.395},{"s":"BSE","k":"3700CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":50.199,"p":3510.4,"d":5.4,"pr":63.75,"pp":1.82,"av":50.44,"iv":36.18,"ch":0.2,"pe":50.62,"hi":4446.8,"lo":2326.1,"cap":1432.0,"pv":1.7,"rank":4,"ratio":1.394}],"puts":[{"s":"ITC","k":"252.5PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":23.401,"p":265.6,"d":4.93,"pr":1.25,"pp":0.47,"av":25.6,"iv":21.8,"ch":0.2,"pe":16.45,"hi":426.4,"lo":252.8,"cap":3328.0,"pv":2.0,"rank":1,"ratio":1.174},{"s":"ITC","k":"257.5PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":23.743,"p":265.6,"d":3.05,"pr":2.05,"pp":0.77,"av":25.6,"iv":20.43,"ch":0.2,"pe":16.45,"hi":426.4,"lo":252.8,"cap":3328.0,"pv":2.0,"rank":2,"ratio":1.253},{"s":"BSE","k":"3400PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":39.469,"p":3510.4,"d":3.14,"pr":86.2,"pp":2.46,"av":50.44,"iv":39.65,"ch":0.2,"pe":50.62,"hi":4446.8,"lo":2326.1,"cap":1432.0,"pv":1.7,"rank":3,"ratio":1.272},{"s":"BSE","k":"3350PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":46.982,"p":3510.4,"d":4.57,"pr":70.5,"pp":2.01,"av":50.44,"iv":40.25,"ch":0.2,"pe":50.62,"hi":4446.8,"lo":2326.1,"cap":1432.0,"pv":1.7,"rank":4,"ratio":1.253}],"meta":{"generated":"31 Oct 2026, 18:35","runRepo":"hackerman3102/stock-page","runTokenHelp":"https://github.com/settings/personal-access-tokens/new","expiry":"23-Nov-2026"},"base":"","current":"20261031-183550","choices":["AUTO","BANKING","CAPITAL_GOODS","CEMENT_BUILDING","CHEMICALS","CONSUMER","DEFENCE","ELECTRICALS","ENERGY","FINANCIAL_SERVICES","FINTECH","FMCG","HEALTHCARE","INFRA_LOGISTICS","INTERNET","IT","PHARMA","REAL_ESTATE","STEEL","TELECOM","LARGE_CAP","PRIVATE_BANKS","PUBLIC_BANKS"]};
 const LABELS = 10, PAGE = 15;
 let side = "calls", selIdx = 0, zoom = false, shown = PAGE, secSel = "";
 const $ = id => document.getElementById(id);
@@ -187,7 +199,7 @@ function header(){
   $("sub").textContent = [m.expiry ? "Expiry " + m.expiry : "", DATA.calls.length + " calls · " + DATA.puts.length + " puts"]
     .filter(Boolean).join(" · ");
   $("gen").textContent = m.generated;
-  if (m.runUrl && DATA.base === ""){ $("runLink").href = m.runUrl; $("runLink").style.display = "inline-block"; }
+
   $("bCalls").textContent = "Calls (" + DATA.calls.length + ")";
   $("bPuts").textContent = "Puts (" + DATA.puts.length + ")";
 }
@@ -358,6 +370,90 @@ function runs(){
     }).catch(() => {});
 }
 
+// ---------- Run a new screen (creates a request the laptop watcher picks up) ----------
+const TOKEN_KEY = "optionsRunToken";
+const store = {
+  get(){ try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } },
+  set(v){ try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+};
+let pollTimer = null;
+function runPanel(){
+  const m = DATA.meta;
+  if (!m.runRepo || DATA.base !== "") return;
+  $("runPanel").style.display = "block";
+  const opts = '<option value="">All stocks (default from const.py)</option>' +
+    (DATA.choices || []).map(c => '<option value="' + c + '">' + nice(c) + "</option>").join("") + '<option value="__custom">Type symbols…</option>';
+  if (!store.get()){
+    $("runBody").innerHTML =
+      '<p class="small">One-time setup: paste a GitHub token that can only create issues in <b>' + m.runRepo + '</b>. ' +
+      'It is saved only in this browser. <a href="' + m.runTokenHelp + '" target="_blank" rel="noopener">Create the token</a> ' +
+      '(repository access: only <i>' + m.runRepo.split("/")[1] + '</i>; permission <i>Issues: Read and write</i>).</p>' +
+      '<label for="rTok">Token</label><input id="rTok" type="password" autocomplete="off" placeholder="github_pat_…">' +
+      '<button class="go" id="rSave">Save token</button>';
+    $("rSave").onclick = () => { const v = $("rTok").value.trim(); if (v){ store.set(v); runPanel(); } };
+    return;
+  }
+  $("runBody").innerHTML =
+    '<label for="rStocks">Stocks</label><select id="rStocks">' + opts + '</select>' +
+    '<input id="rCustom" style="display:none;margin-top:8px" placeholder="e.g. ITC, INFY">' +
+    '<label for="rExp">Expiry dates (blank = default)</label><input id="rExp" placeholder="24-Nov-2026">' +
+    '<div class="two"><div><label for="rMin">Min strike distance %</label><input id="rMin" inputmode="decimal" placeholder="default"></div>' +
+    '<div><label for="rMax">Max strike distance %</label><input id="rMax" inputmode="decimal" placeholder="default"></div></div>' +
+    '<div class="two"><div><label for="rItems">Picks per stock</label><input id="rItems" inputmode="numeric" placeholder="default"></div>' +
+    '<div><label for="rMom">Momentum mode</label><select id="rMom"><option>Default</option><option>Off</option><option>On</option></select></div></div>' +
+    '<div class="two"><div><label for="rMc">Momentum call threshold</label><input id="rMc" inputmode="decimal" placeholder="default"></div>' +
+    '<div><label for="rMp">Momentum put threshold</label><input id="rMp" inputmode="decimal" placeholder="default"></div></div>' +
+    '<button class="go" id="rGo">Run on my laptop</button>' +
+    '<div class="status" id="rStatus" style="display:none"></div>' +
+    '<p class="small">Blank fields use your const.py defaults. The laptop must be on with the watcher running.</p>' +
+    '<button class="lnk" id="rForget">Remove saved token</button>';
+  $("rStocks").onchange = () => { $("rCustom").style.display = $("rStocks").value === "__custom" ? "block" : "none"; };
+  $("rForget").onclick = () => { store.set(""); runPanel(); };
+  $("rGo").onclick = submitRun;
+}
+function say(t){ const b = $("rStatus"); b.style.display = "block"; b.textContent = t; }
+function submitRun(){
+  const v = id => $(id).value.trim();
+  const stocks = v("rStocks") === "__custom" ? v("rCustom") : v("rStocks");
+  const F = [["Stocks", stocks], ["Expiry dates", v("rExp")], ["Min strike distance %", v("rMin")], ["Max strike distance %", v("rMax")],
+             ["Picks per stock", v("rItems")], ["Momentum mode", v("rMom")], ["Momentum call threshold", v("rMc")], ["Momentum put threshold", v("rMp")]];
+  const body = F.map(([k, x]) => "### " + k + "\n\n" + (x || "_No response_")).join("\n\n");
+  const title = "[run] " + (stocks ? stocks : "all stocks") + " " + new Date().toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit"});
+  $("rGo").disabled = true; say("Sending request…");
+  fetch("https://api.github.com/repos/" + DATA.meta.runRepo + "/issues", {
+    method: "POST",
+    headers: {"Accept": "application/vnd.github+json", "Authorization": "Bearer " + store.get(), "Content-Type": "application/json"},
+    body: JSON.stringify({title: title, body: body})
+  }).then(r => r.json().then(j => ({ok: r.ok, status: r.status, j: j}))).then(res => {
+    if (!res.ok){
+      $("rGo").disabled = false;
+      say(res.status === 401 || res.status === 403 || res.status === 404
+        ? "GitHub refused the token (" + res.status + "). Remove it below and create a new one with Issues: Read and write on " + DATA.meta.runRepo + "."
+        : "Could not send the request (" + res.status + "): " + (res.j && res.j.message || ""));
+      return;
+    }
+    say("Request #" + res.j.number + " sent. Waiting for the laptop to pick it up…");
+    watchIssue(res.j.number, 0);
+  }).catch(e => { $("rGo").disabled = false; say("Could not reach GitHub: " + e.message); });
+}
+function watchIssue(n, ticks){
+  clearTimeout(pollTimer);
+  if (ticks > 540){ $("rGo").disabled = false; say("Stopped watching request #" + n + " (3 hours). Check the laptop."); return; }
+  const h = {"Accept": "application/vnd.github+json", "Authorization": "Bearer " + store.get()};
+  const base = "https://api.github.com/repos/" + DATA.meta.runRepo + "/issues/" + n;
+  fetch(base, {headers: h}).then(r => r.json()).then(iss =>
+    fetch(base + "/comments", {headers: h}).then(r => r.json()).then(cs => {
+      const last = cs.length ? cs[cs.length - 1].body : "";
+      if (iss.state === "closed"){
+        $("rGo").disabled = false;
+        say("Request #" + n + ": " + (last || "closed") + (/^Finished/.test(last) ? "\nReload this page in about a minute to see the new picks." : ""));
+      } else {
+        say("Request #" + n + ": " + (last || "waiting for the laptop to pick it up…"));
+        pollTimer = setTimeout(() => watchIssue(n, ticks + 1), 20000);
+      }
+    })).catch(() => { pollTimer = setTimeout(() => watchIssue(n, ticks + 1), 30000); });
+}
+
 function setSide(s){
   side = s; selIdx = 0; shown = PAGE; secs();
   $("bCalls").setAttribute("aria-pressed", s === "calls");
@@ -379,7 +475,7 @@ let rz; window.addEventListener("resize", () => {
   rz = setTimeout(() => { if (Math.abs($("chart").clientWidth - lastW) > 30) draw(); }, 250);
 });
 
-header(); secs(); runs();
+header(); secs(); runPanel(); runs();
 if (!DATA.calls.length && DATA.puts.length) side = "puts";
 setSide(side);
 </script>
