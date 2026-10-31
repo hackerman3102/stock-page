@@ -1,0 +1,68 @@
+name: Run options screen
+description: Start options.py on the laptop and publish the page. Leave a field blank to use const.py.
+title: "[run] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Leave anything blank to use the default from const.py. The laptop must be on and running run_watcher.py.
+  - type: input
+    attributes:
+      label: "Stocks"
+      description: "ALL, a sector, or symbols separated by commas. Sectors: AUTO, BANKING, CAPITAL_GOODS, CEMENT_BUILDING, CHEMICALS, CONSUMER, DEFENCE, ELECTRICALS, ENERGY, FINANCIAL_SERVICES, FINTECH, FMCG, HEALTHCARE, INFRA_LOGISTICS, INTERNET, IT, PHARMA, REAL_ESTATE, STEEL, TELECOM"
+      placeholder: "IT, ITC"
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Expiry dates"
+      description: "One or more expiry dates, e.g. 24-Nov-2026"
+      placeholder: "24-Nov-2026"
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Min strike distance %"
+      description: "Closest strike to the stock price, in %"
+      placeholder: "1"
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Max strike distance %"
+      description: "Farthest strike from the stock price, in %"
+      placeholder: "1.5"
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Picks per stock"
+      description: "How many options to keep per stock and side"
+      placeholder: "2"
+    validations:
+      required: false
+  - type: dropdown
+    id: momentum
+    attributes:
+      label: Momentum mode
+      options:
+        - "Default (from const.py)"
+        - "Off"
+        - "On"
+      default: 0
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Momentum call threshold"
+      description: "Calls only when the day change is at most this %"
+      placeholder: "-1"
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: "Momentum put threshold"
+      description: "Puts only when the day change is at least this %"
+      placeholder: "2"
+    validations:
+      required: false
