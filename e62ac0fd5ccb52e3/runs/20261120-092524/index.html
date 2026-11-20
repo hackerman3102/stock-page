@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="build" content="20 Nov 2026, 09:25">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Options">
+<title>Options Picks</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --fg:#111827; --muted:#5b6472; --line:#e3e6eb;
+  --accent:#0f766e; --accent-fg:#ffffff; --good:#15803d; --bad:#b91c1c; --warn:#b45309;
+  --chip:#eef1f5; --shadow:0 1px 2px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b0f14; --card:#151b23; --fg:#e8ecf1; --muted:#9aa5b4; --line:#263040;
+    --accent:#2dd4bf; --accent-fg:#06201d; --good:#4ade80; --bad:#f87171; --warn:#fbbf24;
+    --chip:#1e2733; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b0f14; --card:#151b23; --fg:#e8ecf1; --muted:#9aa5b4; --line:#263040;
+  --accent:#2dd4bf; --accent-fg:#06201d; --good:#4ade80; --bad:#f87171; --warn:#fbbf24;
+  --chip:#1e2733; --shadow:none;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding:max(12px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+  max-width:760px;margin:0 auto}
+h1{font-size:22px;margin:4px 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.seg{display:flex;background:var(--chip);border-radius:12px;padding:3px;margin:0 0 12px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);font-weight:600;font-size:15px;font-family:inherit;
+  padding:11px 8px;border-radius:10px;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:12px;margin:0 0 12px}
+.hint{font-size:13px;color:var(--muted);margin:0 0 8px}
+.hint b{color:var(--fg)}
+#chart{width:100%;height:min(66vh,520px);min-height:340px}
+.tools{display:flex;gap:8px;margin-top:8px}
+.tools button{flex:1;min-height:40px;border-radius:10px;border:1px solid var(--line);background:var(--chip);
+  color:var(--fg);font-weight:600;font-size:14px;font-family:inherit}
+.tools .sq{flex:0 0 52px;font-size:20px;line-height:1}
+.tools button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.sel-title{font-size:19px;font-weight:700;margin:0}
+.sel-sub{font-size:13px;color:var(--muted);margin:2px 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{background:var(--chip);border-radius:10px;padding:8px 10px;min-width:0}
+.tile .l{font-size:12px;color:var(--muted)}
+.tile .v{font-size:17px;font-weight:650;overflow-wrap:anywhere}
+.good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+details{margin:0 0 12px}
+summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:center}
+.key{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.runpanel label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.runpanel input,.runpanel select{width:100%;box-sizing:border-box;min-height:44px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);
+  background:var(--bg);color:var(--fg);font-size:16px;font-family:inherit}
+.runpanel .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.runpanel .go{width:100%;min-height:48px;margin-top:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:700;font-family:inherit}
+.runpanel .go[disabled]{opacity:.6}
+.runpanel .small{font-size:12.5px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+.runpanel .status{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--chip);font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.runpanel button.lnk{background:none;border:0;color:var(--accent);font-size:13px;font-weight:600;padding:6px 0;font-family:inherit}
+.runlink{display:inline-block;margin:-6px 0 12px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
+.secs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.secs::-webkit-scrollbar{display:none}
+.secs button{flex:0 0 auto;min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--chip);
+  color:var(--fg);font-size:13px;font-weight:600;white-space:nowrap}
+.secs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.secs small{font-weight:500;opacity:.75;margin-left:4px}
+.searchrow{display:flex;gap:8px;margin:0 0 10px}
+.searchrow input{flex:1;min-width:0;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:16px;font-family:inherit}
+.searchrow button{flex:0 0 auto;min-height:44px;padding:8px 16px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-fg);font-size:15px;font-weight:700;font-family:inherit}
+.sortrow{display:flex;gap:8px;align-items:center;margin:0 0 10px}
+.sortrow select{flex:1;min-width:0;min-height:44px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:15px;font-family:inherit}
+.sortrow button{flex:0 0 auto;min-height:44px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--chip);color:var(--fg);font-size:14px;font-weight:600;font-family:inherit}
+.sizenote{font-size:12px;color:var(--muted);margin:2px 0 0}
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:10px 0 2px;font-size:12px;color:var(--muted)}
+.lg span.c{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:3px solid}
+.lg .full{grid-column:1/-1}
+.runs-list{max-height:320px;overflow-y:auto}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.ring{background:transparent!important;border:3px solid}
+h2{font-size:17px;margin:18px 2px 8px}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--fg);
+  border-radius:14px;padding:12px;margin:0 0 8px;font:inherit;box-shadow:var(--shadow)}
+.pick[aria-current="true"]{border-color:var(--accent);outline:2px solid var(--accent)}
+.pick .top{display:flex;align-items:center;gap:10px}
+.badge{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.pick .name{font-weight:700;font-size:17px;flex:1;min-width:0;overflow-wrap:anywhere}
+.pick .score{font-weight:700;font-size:15px}
+.pick .score small{display:block;font-weight:500;color:var(--muted);font-size:11px;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--chip);border-radius:999px;padding:3px 9px;font-size:13px;white-space:nowrap}
+.more{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--chip);
+  color:var(--fg);font-weight:600;font-size:15px;font-family:inherit;margin:4px 0 12px}
+.runs a{display:flex;justify-content:space-between;padding:12px 4px;border-top:1px solid var(--line);
+  color:var(--accent);text-decoration:none;font-weight:600;min-height:44px;align-items:center}
+.runs a:first-of-type{border-top:0}
+.foot{color:var(--muted);font-size:12px;margin:16px 2px 0}
+.empty{padding:28px 8px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<h1>Options picks</h1>
+<p class="sub" id="sub"></p>
+<details class="card runpanel" id="runPanel" style="display:none">
+  <summary>Run a new screen</summary>
+  <div id="runBody"></div>
+</details>
+
+<div class="seg" role="group" aria-label="Option type">
+  <button id="bCalls" aria-pressed="true">Calls</button>
+  <button id="bPuts" aria-pressed="false">Puts</button>
+</div>
+
+<div class="card">
+  <p class="hint"><b>Lower score = better</b> (cheap premium for the move needed).
+    <b>Higher on the chart</b> = option cheap vs the stock's own volatility.</p>
+  <form class="searchrow" id="searchForm" role="search">
+    <input id="q" type="search" placeholder="Search stock, e.g. INFY" aria-label="Search stock by name" autocomplete="off" autocapitalize="characters" enterkeyhint="search">
+    <button type="submit" id="qGo">Search</button>
+  </form>
+  <div class="secs" id="secs" role="group" aria-label="Filter by sector"></div>
+  <div class="secs" id="erRow" role="group" aria-label="Filter by results date"></div>
+  <div id="chart"></div>
+  <div class="tools">
+    <button id="bZoom" aria-pressed="false">Pan: off</button>
+    <button id="bIn" class="sq" aria-label="Zoom in">+</button>
+    <button id="bOut" class="sq" aria-label="Zoom out">&minus;</button>
+    <button id="bReset">Reset</button>
+  </div>
+  <p class="sizenote" id="sizeNote"></p>
+  <div class="lg" aria-label="Colour key">
+    <div class="full"><b>Fill</b> = 52-week position, <b>border</b> = today's move</div>
+    <div><span class="c" style="background:#2b7de9;border-color:#16a34a"></span>Near high, up today</div>
+    <div><span class="c" style="background:#2b7de9;border-color:#dc2626"></span>Near high, down today</div>
+    <div><span class="c" style="background:#f08a24;border-color:#16a34a"></span>Near low, up today</div>
+    <div><span class="c" style="background:#f08a24;border-color:#dc2626"></span>Near low, down today</div>
+    <div><span class="c" style="background:#8f98a4;border-color:#16a34a"></span>Mid-range, up today</div>
+    <div><span class="c" style="background:#8f98a4;border-color:#dc2626"></span>Mid-range, down today</div>
+    <div class="full">&#9733; star = results coming &middot; bubble size = annual volatility &middot; near = within 5% of the 52-week high/low</div>
+  </div>
+</div>
+
+<div class="card" id="detail" aria-live="polite"></div>
+
+<details class="card">
+  <summary>How to read the chart</summary>
+  <div class="key">
+    <div>Tap a bubble (or a pick below) to see its details. Top picks are labelled.</div>
+    <div><span class="dot" style="background:#2b7de9"></span>Fill: within 5% of the 52-week <b>high</b></div>
+    <div><span class="dot" style="background:#f08a24"></span>Fill: within 5% of the 52-week <b>low</b></div>
+    <div><span class="dot" style="background:#8f98a4"></span>Fill: in between</div>
+    <div><span class="dot ring" style="border-color:#16a34a"></span>Border green = stock up today &nbsp;
+         <span class="dot ring" style="border-color:#dc2626"></span>red = down</div>
+    <div>Bigger bubble = more volatile stock (sized relative to the others on screen). &#9733; star = results (earnings) coming.</div>
+    <div>Dashed line = implied vol equals annual vol.</div>
+  </div>
+</details>
+
+<h2 id="listTitle">Top picks</h2>
+<div class="sortrow">
+  <select id="sortBy" aria-label="Sort by"></select>
+  <button id="sortDir" aria-label="Reverse order"></button>
+</div>
+<div id="list"></div>
+<button class="more" id="more">Show more</button>
+
+<div class="card runs" id="runs" style="display:none"></div>
+<p class="foot">Personal screening output from NSE data, not investment advice. Generated <span id="gen"></span>.</p>
+
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+<script>
+const DATA = {"calls":[{"s":"AXISBANK","k":"1440CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":2.714,"p":1380.0,"d":4.35,"pr":0.25,"pp":0.02,"av":29.04,"iv":22.14,"ch":-0.0,"pe":14.14,"hi":1418.3,"lo":1150.3,"cap":4299.0,"pv":0.9,"vol":79.0,"oi":388.0,"rank":1,"ratio":1.312},{"s":"CHOLAFIN","k":"1940CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":3.868,"p":1851.0,"d":4.81,"pr":0.6,"pp":0.03,"av":40.31,"iv":28.18,"ch":-1.2,"pe":25.85,"hi":1952.5,"lo":1299.4,"cap":1589.0,"pv":1.6,"vol":68.0,"oi":221.0,"rank":2,"ratio":1.43},{"s":"WAAREEENER","k":"2520CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":5.031,"p":2419.6,"d":4.15,"pr":1.3,"pp":0.05,"av":44.32,"iv":28.54,"ch":-0.6,"pe":17.74,"hi":3557.0,"lo":2161.5,"cap":696.0,"pv":1.2,"vol":33.0,"oi":318.0,"rank":3,"ratio":1.553},{"s":"IOC","k":"152CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":5.282,"p":146.11,"d":4.03,"pr":0.06,"pp":0.04,"av":31.33,"iv":25.96,"ch":-1.2,"pe":4.06,"hi":188.96,"lo":124.92,"cap":2061.0,"pv":1.1,"vol":7.0,"oi":141.0,"rank":4,"ratio":1.207},{"s":"NTPC","k":"335CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":5.471,"p":321.1,"d":4.33,"pr":0.1,"pp":0.03,"av":24.65,"iv":24.49,"ch":-1.2,"pe":10.2,"hi":414.4,"lo":292.05,"cap":3114.0,"pv":0.6,"vol":8.0,"oi":694.0,"rank":5,"ratio":1.007},{"s":"LT","k":"4350CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":5.624,"p":4149.0,"d":4.84,"pr":1.4,"pp":0.03,"av":29.04,"iv":28.17,"ch":-1.5,"pe":27.39,"hi":4440.0,"lo":3288.1,"cap":5708.0,"pv":0.8,"vol":104.0,"oi":499.0,"rank":6,"ratio":1.031},{"s":"OBEROIRLTY","k":"1880CE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":5.797,"p":1802.2,"d":4.32,"pr":0.85,"pp":0.05,"av":35.15,"iv":25.95,"ch":-0.2,"pe":24.88,"hi":1986.1,"lo":1391.2,"cap":657.0,"pv":1.7,"vol":4.0,"oi":348.0,"rank":7,"ratio":1.355},{"s":"PNBHOUSING","k":"1200CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":6.057,"p":1149.4,"d":4.4,"pr":0.65,"pp":0.06,"av":41.08,"iv":28.73,"ch":-0.4,"pe":12.49,"hi":1224.8,"lo":729.6,"cap":300.0,"pv":0.7,"vol":8.0,"oi":491.0,"rank":8,"ratio":1.43},{"s":"HDFCAMC","k":"2840CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":6.083,"p":2717.9,"d":4.49,"pr":1.4,"pp":0.05,"av":38.02,"iv":29.18,"ch":1.1,"pe":38.17,"hi":2901.5,"lo":2205.6,"cap":1166.0,"pv":3.0,"vol":80.0,"oi":163.0,"rank":9,"ratio":1.303},{"s":"BAJFINANCE","k":"1140CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":6.401,"p":1089.35,"d":4.65,"pr":0.55,"pp":0.05,"av":36.68,"iv":30.22,"ch":-0.3,"pe":31.43,"hi":1176.4,"lo":787.9,"cap":6907.0,"pv":1.1,"vol":201.0,"oi":654.0,"rank":10,"ratio":1.214},{"s":"FEDERALBNK","k":"380CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":6.451,"p":362.8,"d":4.74,"pr":0.15,"pp":0.04,"av":30.38,"iv":28.76,"ch":-0.5,"pe":17.18,"hi":371.7,"lo":242.3,"cap":897.0,"pv":0.7,"vol":29.0,"oi":507.0,"rank":11,"ratio":1.056},{"s":"COALINDIA","k":"409.75CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":6.848,"p":390.35,"d":4.97,"pr":0.15,"pp":0.04,"av":27.89,"iv":30.88,"ch":-0.2,"pe":7.67,"hi":491.25,"lo":369.6,"cap":2407.0,"pv":1.0,"vol":9.0,"oi":1443.0,"rank":12,"ratio":0.903},{"s":"BHARTIARTL","k":"2240CE","x":"23-Nov-2026","er":"NO","sec":"TELECOM","sc":6.895,"p":2142.0,"d":4.58,"pr":0.85,"pp":0.04,"av":26.36,"iv":26.61,"ch":-0.1,"pe":34.58,"hi":2174.5,"lo":1726.3,"cap":13373.0,"pv":1.2,"vol":301.0,"oi":872.0,"rank":13,"ratio":0.991},{"s":"ABCAPITAL","k":"435CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":7.201,"p":415.45,"d":4.71,"pr":0.25,"pp":0.06,"av":39.36,"iv":28.97,"ch":-0.2,"pe":23.99,"hi":430.7,"lo":287.7,"cap":1140.0,"pv":1.3,"vol":22.0,"oi":314.0,"rank":14,"ratio":1.359},{"s":"KOTAKBANK","k":"530CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":7.251,"p":505.25,"d":4.9,"pr":0.2,"pp":0.04,"av":26.75,"iv":27.71,"ch":0.5,"pe":22.92,"hi":505.6,"lo":345.5,"cap":5027.0,"pv":1.3,"vol":20.0,"oi":243.0,"rank":15,"ratio":0.965},{"s":"ZYDUSLIFE","k":"1260CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":7.671,"p":1204.7,"d":4.59,"pr":0.6,"pp":0.05,"av":29.8,"iv":28.33,"ch":0.2,"pe":28.0,"hi":1266.6,"lo":835.5,"cap":1202.0,"pv":1.2,"vol":8.0,"oi":545.0,"rank":16,"ratio":1.052},{"s":"ONGC","k":"234.5CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":7.947,"p":224.1,"d":4.64,"pr":0.11,"pp":0.05,"av":28.66,"iv":29.12,"ch":-0.2,"pe":5.58,"hi":307.5,"lo":218.53,"cap":2819.0,"pv":0.4,"vol":28.0,"oi":483.0,"rank":17,"ratio":0.984},{"s":"TECHM","k":"1840CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":7.986,"p":1756.3,"d":4.77,"pr":1.0,"pp":0.06,"av":34.01,"iv":31.37,"ch":1.8,"pe":30.79,"hi":1860.0,"lo":1304.1,"cap":1719.0,"pv":2.8,"vol":129.0,"oi":909.0,"rank":18,"ratio":1.084},{"s":"NMDC","k":"70CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":8.286,"p":66.82,"d":4.76,"pr":0.04,"pp":0.06,"av":34.39,"iv":28.3,"ch":-2.0,"pe":8.08,"hi":97.49,"lo":65.15,"cap":587.0,"pv":1.7,"vol":282.0,"oi":1956.0,"rank":19,"ratio":1.215},{"s":"OIL","k":"450CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":8.383,"p":430.4,"d":4.55,"pr":0.3,"pp":0.07,"av":37.83,"iv":30.95,"ch":-0.1,"pe":6.81,"hi":531.0,"lo":395.6,"cap":700.0,"pv":1.2,"vol":14.0,"oi":648.0,"rank":20,"ratio":1.222},{"s":"COLPAL","k":"1860CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":8.407,"p":1775.0,"d":4.79,"pr":1.0,"pp":0.06,"av":32.1,"iv":34.54,"ch":-0.2,"pe":33.72,"hi":2301.6,"lo":1563.9,"cap":482.0,"pv":0.9,"vol":3.0,"oi":63.0,"rank":21,"ratio":0.929},{"s":"ASIANPAINT","k":"2720CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":8.642,"p":2592.1,"d":4.93,"pr":1.25,"pp":0.05,"av":27.51,"iv":30.44,"ch":-0.0,"pe":50.47,"hi":2985.7,"lo":2115.0,"cap":2488.0,"pv":0.9,"vol":6.0,"oi":165.0,"rank":22,"ratio":0.904},{"s":"HDFCLIFE","k":"605CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":9.199,"p":578.45,"d":4.59,"pr":0.35,"pp":0.06,"av":30.19,"iv":29.63,"ch":0.1,"pe":61.04,"hi":788.5,"lo":508.05,"cap":1256.0,"pv":2.1,"vol":11.0,"oi":427.0,"rank":23,"ratio":1.019},{"s":"DMART","k":"3650CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":9.213,"p":3484.1,"d":4.76,"pr":2.1,"pp":0.06,"av":31.14,"iv":31.36,"ch":-0.5,"pe":72.42,"hi":4644.0,"lo":3102.3,"cap":2272.0,"pv":0.9,"vol":7.0,"oi":287.0,"rank":24,"ratio":0.993},{"s":"M&M","k":"3650CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":9.224,"p":3485.0,"d":4.73,"pr":2.35,"pp":0.07,"av":34.58,"iv":33.17,"ch":-0.7,"pe":19.48,"hi":3839.9,"lo":2744.3,"cap":4334.0,"pv":1.7,"vol":887.0,"oi":1191.0,"rank":25,"ratio":1.043},{"s":"DABUR","k":"410CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":9.296,"p":393.7,"d":4.14,"pr":0.25,"pp":0.06,"av":28.28,"iv":31.81,"ch":0.8,"pe":33.63,"hi":534.0,"lo":354.3,"cap":698.0,"pv":1.2,"vol":15.0,"oi":643.0,"rank":26,"ratio":0.889},{"s":"VBL","k":"440CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":9.452,"p":419.65,"d":4.85,"pr":0.3,"pp":0.07,"av":36.68,"iv":32.27,"ch":-0.1,"pe":41.09,"hi":555.8,"lo":381.0,"cap":1420.0,"pv":0.8,"vol":29.0,"oi":693.0,"rank":27,"ratio":1.137},{"s":"LICI","k":"425CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":9.613,"p":405.1,"d":4.91,"pr":0.25,"pp":0.06,"av":31.52,"iv":33.24,"ch":0.2,"pe":8.15,"hi":460.5,"lo":360.75,"cap":5123.0,"pv":1.0,"vol":2.0,"oi":289.0,"rank":28,"ratio":0.948},{"s":"BAJAJFINSV","k":"1960CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":9.966,"p":1871.3,"d":4.74,"pr":1.15,"pp":0.06,"av":29.23,"iv":30.34,"ch":-0.7,"pe":13.61,"hi":2118.5,"lo":1597.0,"cap":2998.0,"pv":1.3,"vol":12.0,"oi":330.0,"rank":29,"ratio":0.963},{"s":"RELIANCE","k":"1430CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":9.987,"p":1362.7,"d":4.94,"pr":0.8,"pp":0.06,"av":29.04,"iv":31.9,"ch":-1.0,"pe":19.29,"hi":1611.8,"lo":1152.2,"cap":18437.0,"pv":0.6,"vol":400.0,"oi":1728.0,"rank":30,"ratio":0.91},{"s":"ADANIPORTS","k":"2000CE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":10.292,"p":1912.8,"d":4.56,"pr":1.6,"pp":0.08,"av":37.06,"iv":29.94,"ch":-0.1,"pe":32.04,"hi":1979.0,"lo":1292.0,"cap":4410.0,"pv":0.8,"vol":151.0,"oi":1321.0,"rank":31,"ratio":1.238},{"s":"HINDUNILVR","k":"2140CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":10.436,"p":2050.9,"d":4.34,"pr":1.3,"pp":0.06,"av":26.36,"iv":29.55,"ch":-1.2,"pe":31.07,"hi":2488.0,"lo":1758.2,"cap":4816.0,"pv":0.8,"vol":85.0,"oi":284.0,"rank":32,"ratio":0.892},{"s":"BEL","k":"420CE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":10.624,"p":401.75,"d":4.54,"pr":0.3,"pp":0.07,"av":31.91,"iv":30.6,"ch":-0.6,"pe":45.2,"hi":473.45,"lo":354.55,"cap":2937.0,"pv":0.7,"vol":103.0,"oi":2166.0,"rank":33,"ratio":1.043},{"s":"CONCOR","k":"460CE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":10.791,"p":439.5,"d":4.66,"pr":0.35,"pp":0.08,"av":34.39,"iv":32.63,"ch":-1.0,"pe":27.25,"hi":543.7,"lo":404.25,"cap":335.0,"pv":1.1,"vol":33.0,"oi":599.0,"rank":34,"ratio":1.054},{"s":"NAUKRI","k":"1220CE","x":"23-Nov-2026","er":"NO","sec":"INTERNET","sc":10.829,"p":1164.4,"d":4.77,"pr":1.0,"pp":0.09,"av":37.83,"iv":34.7,"ch":0.8,"pe":33.85,"hi":1402.8,"lo":908.3,"cap":757.0,"pv":1.6,"vol":12.0,"oi":643.0,"rank":35,"ratio":1.09},{"s":"TRENT","k":"3350CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":10.931,"p":3197.4,"d":4.77,"pr":3.15,"pp":0.1,"av":42.99,"iv":34.19,"ch":-0.8,"pe":89.09,"hi":3399.7,"lo":2183.67,"cap":1705.0,"pv":1.0,"vol":89.0,"oi":628.0,"rank":36,"ratio":1.257},{"s":"BHARATFORG","k":"1780CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":10.968,"p":1703.0,"d":4.52,"pr":1.5,"pp":0.09,"av":36.3,"iv":29.06,"ch":-1.5,"pe":118.43,"hi":2295.0,"lo":1323.8,"cap":832.0,"pv":1.5,"vol":65.0,"oi":514.0,"rank":37,"ratio":1.249},{"s":"UNOMINDA","k":"1460CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":11.038,"p":1392.4,"d":4.85,"pr":1.35,"pp":0.1,"av":42.6,"iv":33.17,"ch":0.6,"pe":56.17,"hi":1409.7,"lo":994.0,"cap":805.0,"pv":1.7,"vol":51.0,"oi":300.0,"rank":38,"ratio":1.284},{"s":"ASIANPAINT","k":"2700CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":11.084,"p":2592.1,"d":4.16,"pr":1.9,"pp":0.07,"av":27.51,"iv":29.04,"ch":-0.0,"pe":50.47,"hi":2985.7,"lo":2115.0,"cap":2488.0,"pv":0.9,"vol":171.0,"oi":816.0,"rank":39,"ratio":0.947},{"s":"SOLARINDS","k":"19500CE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":11.463,"p":18629.0,"d":4.68,"pr":20.05,"pp":0.11,"av":43.94,"iv":34.29,"ch":-1.0,"pe":71.65,"hi":22700.0,"lo":11646.0,"cap":1689.0,"pv":0.9,"vol":224.0,"oi":2098.0,"rank":40,"ratio":1.281},{"s":"INDIGO","k":"5700CE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":11.691,"p":5444.0,"d":4.7,"pr":5.2,"pp":0.1,"av":38.4,"iv":33.95,"ch":-0.7,"pe":100.0,"hi":5970.0,"lo":3895.2,"cap":2102.0,"pv":0.8,"vol":241.0,"oi":1923.0,"rank":41,"ratio":1.131},{"s":"APLAPOLLO","k":"2180CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":12.174,"p":2092.0,"d":4.21,"pr":2.15,"pp":0.1,"av":35.54,"iv":33.23,"ch":-2.8,"pe":45.81,"hi":2312.3,"lo":1690.0,"cap":580.0,"pv":2.7,"vol":203.0,"oi":327.0,"rank":42,"ratio":1.07},{"s":"RELIANCE","k":"1420CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":12.205,"p":1362.7,"d":4.2,"pr":1.15,"pp":0.08,"av":29.04,"iv":30.05,"ch":-1.0,"pe":19.29,"hi":1611.8,"lo":1152.2,"cap":18437.0,"pv":0.6,"vol":1002.0,"oi":4427.0,"rank":43,"ratio":0.966},{"s":"GAIL","k":"200CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":12.236,"p":190.55,"d":4.96,"pr":0.15,"pp":0.08,"av":31.91,"iv":35.07,"ch":-0.8,"pe":9.91,"hi":192.3,"lo":134.36,"cap":1253.0,"pv":0.6,"vol":55.0,"oi":713.0,"rank":44,"ratio":0.91},{"s":"PATANJALI","k":"420CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":12.272,"p":402.9,"d":4.24,"pr":0.45,"pp":0.11,"av":38.59,"iv":33.0,"ch":0.2,"pe":22.15,"hi":589.95,"lo":328.2,"cap":438.0,"pv":0.9,"vol":30.0,"oi":512.0,"rank":45,"ratio":1.169},{"s":"SBIN","k":"1200CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":12.357,"p":1149.05,"d":4.43,"pr":0.9,"pp":0.08,"av":28.08,"iv":31.5,"ch":-0.7,"pe":11.59,"hi":1234.7,"lo":933.9,"cap":10592.0,"pv":0.5,"vol":730.0,"oi":2566.0,"rank":46,"ratio":0.891},{"s":"RADICO","k":"4800CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":12.725,"p":4614.0,"d":4.03,"pr":5.65,"pp":0.12,"av":38.78,"iv":31.75,"ch":-0.9,"pe":78.49,"hi":4747.0,"lo":2500.0,"cap":619.0,"pv":1.0,"vol":90.0,"oi":188.0,"rank":47,"ratio":1.221},{"s":"BANKINDIA","k":"167.5CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":13.117,"p":160.76,"d":4.19,"pr":0.2,"pp":0.12,"av":39.74,"iv":34.44,"ch":-0.6,"pe":5.75,"hi":178.36,"lo":123.64,"cap":732.0,"pv":1.0,"vol":12.0,"oi":142.0,"rank":48,"ratio":1.154},{"s":"TVSMOTOR","k":"4800CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":13.275,"p":4577.2,"d":4.87,"pr":4.1,"pp":0.09,"av":32.86,"iv":36.28,"ch":-0.6,"pe":52.05,"hi":4636.1,"lo":3228.0,"cap":2174.0,"pv":1.1,"vol":471.0,"oi":364.0,"rank":49,"ratio":0.906},{"s":"DIVISLAB","k":"11600CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":13.298,"p":11118.0,"d":4.34,"pr":11.0,"pp":0.1,"av":32.29,"iv":33.27,"ch":-0.5,"pe":87.22,"hi":11824.0,"lo":5647.5,"cap":2952.0,"pv":0.7,"vol":81.0,"oi":997.0,"rank":50,"ratio":0.971},{"s":"HINDALCO","k":"940CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":13.344,"p":899.4,"d":4.51,"pr":0.9,"pp":0.1,"av":33.82,"iv":33.21,"ch":-1.2,"pe":10.54,"hi":1176.0,"lo":771.85,"cap":2021.0,"pv":1.0,"vol":372.0,"oi":1274.0,"rank":51,"ratio":1.018},{"s":"CUMMINSIND","k":"4250CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":13.351,"p":4055.9,"d":4.79,"pr":4.6,"pp":0.11,"av":40.69,"iv":34.86,"ch":-2.3,"pe":49.3,"hi":6100.0,"lo":3883.1,"cap":1122.0,"pv":0.5,"vol":86.0,"oi":599.0,"rank":52,"ratio":1.167},{"s":"RECLTD","k":"310CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":13.464,"p":297.4,"d":4.24,"pr":0.35,"pp":0.12,"av":37.06,"iv":30.42,"ch":-0.6,"pe":5.07,"hi":387.8,"lo":281.9,"cap":782.0,"pv":1.2,"vol":116.0,"oi":1328.0,"rank":53,"ratio":1.218},{"s":"PFC","k":"345CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":13.65,"p":329.55,"d":4.69,"pr":0.35,"pp":0.11,"av":36.49,"iv":34.12,"ch":-0.5,"pe":3.19,"hi":486.5,"lo":310.3,"cap":1088.0,"pv":0.8,"vol":30.0,"oi":916.0,"rank":54,"ratio":1.069},{"s":"BIOCON","k":"380CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":13.859,"p":362.6,"d":4.8,"pr":0.35,"pp":0.1,"av":33.43,"iv":31.6,"ch":0.1,"pe":173.34,"hi":447.15,"lo":318.4,"cap":593.0,"pv":0.9,"vol":14.0,"oi":1879.0,"rank":55,"ratio":1.058},{"s":"CANBK","k":"142CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":14.14,"p":135.29,"d":4.96,"pr":0.14,"pp":0.1,"av":36.3,"iv":43.4,"ch":-0.5,"pe":5.93,"hi":162.89,"lo":114.63,"cap":1228.0,"pv":0.8,"vol":2.0,"oi":148.0,"rank":56,"ratio":0.836},{"s":"AUBANK","k":"1010CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":14.229,"p":968.35,"d":4.3,"pr":1.2,"pp":0.12,"av":37.45,"iv":34.01,"ch":-1.5,"pe":23.3,"hi":1144.1,"lo":831.65,"cap":729.0,"pv":1.9,"vol":69.0,"oi":512.0,"rank":57,"ratio":1.101},{"s":"POLYCAB","k":"7700CE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":14.392,"p":7401.5,"d":4.03,"pr":10.15,"pp":0.14,"av":38.4,"iv":32.93,"ch":-1.9,"pe":34.39,"hi":10126.0,"lo":6663.0,"cap":1116.0,"pv":1.9,"vol":285.0,"oi":806.0,"rank":58,"ratio":1.166},{"s":"INDIANB","k":"980CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":14.462,"p":938.5,"d":4.42,"pr":1.15,"pp":0.12,"av":37.45,"iv":33.14,"ch":-0.9,"pe":9.55,"hi":1000.9,"lo":764.05,"cap":1264.0,"pv":1.4,"vol":32.0,"oi":204.0,"rank":59,"ratio":1.13},{"s":"COFORGE","k":"2180CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":14.487,"p":2094.0,"d":4.11,"pr":3.3,"pp":0.16,"av":44.71,"iv":37.6,"ch":2.5,"pe":43.24,"hi":2127.9,"lo":1008.1,"cap":927.0,"pv":3.2,"vol":7.0,"oi":225.0,"rank":60,"ratio":1.189},{"s":"ITC","k":"312.5CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":14.608,"p":298.85,"d":4.57,"pr":0.25,"pp":0.08,"av":26.17,"iv":31.42,"ch":-0.8,"pe":19.33,"hi":409.5,"lo":252.8,"cap":3744.0,"pv":0.8,"vol":14.0,"oi":51.0,"rank":61,"ratio":0.833},{"s":"EICHERMOT","k":"8400CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":14.685,"p":8004.5,"d":4.94,"pr":7.5,"pp":0.09,"av":31.52,"iv":33.34,"ch":-0.5,"pe":35.37,"hi":8230.0,"lo":6442.0,"cap":2201.0,"pv":0.9,"vol":88.0,"oi":705.0,"rank":62,"ratio":0.945},{"s":"TATACONSUM","k":"1200CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":14.824,"p":1153.9,"d":4.0,"pr":1.25,"pp":0.11,"av":29.23,"iv":29.66,"ch":0.8,"pe":65.61,"hi":1282.7,"lo":916.0,"cap":1142.0,"pv":1.9,"vol":94.0,"oi":314.0,"rank":63,"ratio":0.986},{"s":"PREMIERENE","k":"860CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":15.066,"p":825.35,"d":4.2,"pr":1.25,"pp":0.15,"av":42.22,"iv":34.77,"ch":-0.5,"pe":21.2,"hi":1134.0,"lo":660.0,"cap":375.0,"pv":1.2,"vol":671.0,"oi":1185.0,"rank":64,"ratio":1.214},{"s":"IDFCFIRSTB","k":"89CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":15.32,"p":85.25,"d":4.4,"pr":0.11,"pp":0.13,"av":37.06,"iv":34.34,"ch":-0.9,"pe":23.66,"hi":89.61,"lo":58.08,"cap":736.0,"pv":0.8,"vol":37.0,"oi":186.0,"rank":65,"ratio":1.079},{"s":"HINDPETRO","k":"400CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":15.348,"p":384.45,"d":4.04,"pr":0.6,"pp":0.16,"av":41.08,"iv":34.87,"ch":-1.6,"pe":57.21,"hi":508.45,"lo":316.2,"cap":817.0,"pv":1.6,"vol":151.0,"oi":1215.0,"rank":66,"ratio":1.178},{"s":"CANBK","k":"141CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":15.467,"p":135.29,"d":4.22,"pr":0.18,"pp":0.13,"av":36.3,"iv":37.54,"ch":-0.5,"pe":5.93,"hi":162.89,"lo":114.63,"cap":1228.0,"pv":0.8,"vol":20.0,"oi":123.0,"rank":67,"ratio":0.967},{"s":"SHRIRAMFIN","k":"1000CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":15.559,"p":960.85,"d":4.07,"pr":1.6,"pp":0.17,"av":43.56,"iv":34.21,"ch":-1.2,"pe":17.99,"hi":1153.7,"lo":810.1,"cap":2262.0,"pv":1.3,"vol":281.0,"oi":2211.0,"rank":68,"ratio":1.273},{"s":"BAJAJ-AUTO","k":"11400CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":16.011,"p":10896.0,"d":4.63,"pr":11.3,"pp":0.1,"av":29.99,"iv":31.74,"ch":0.7,"pe":22.67,"hi":12470.0,"lo":8624.0,"cap":2995.0,"pv":1.6,"vol":73.0,"oi":502.0,"rank":69,"ratio":0.945},{"s":"BANKBARODA","k":"297.5CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":16.227,"p":284.85,"d":4.44,"pr":0.36,"pp":0.13,"av":34.58,"iv":34.7,"ch":-0.3,"pe":7.24,"hi":325.5,"lo":223.82,"cap":1474.0,"pv":1.3,"vol":10.0,"oi":90.0,"rank":70,"ratio":0.997},{"s":"GLENMARK","k":"2740CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":16.561,"p":2626.4,"d":4.33,"pr":3.55,"pp":0.14,"av":35.34,"iv":34.44,"ch":0.7,"pe":51.46,"hi":2714.0,"lo":1825.1,"cap":741.0,"pv":1.1,"vol":95.0,"oi":502.0,"rank":71,"ratio":1.026},{"s":"ABB","k":"7300CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":16.639,"p":6966.0,"d":4.79,"pr":9.2,"pp":0.13,"av":38.02,"iv":33.5,"ch":0.3,"pe":48.05,"hi":7924.5,"lo":4637.5,"cap":1477.0,"pv":1.5,"vol":29.0,"oi":753.0,"rank":72,"ratio":1.135},{"s":"HAL","k":"4950CE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":16.697,"p":4758.0,"d":4.04,"pr":6.8,"pp":0.14,"av":34.58,"iv":34.46,"ch":-0.2,"pe":32.61,"hi":5149.9,"lo":3479.1,"cap":3177.0,"pv":0.7,"vol":239.0,"oi":1496.0,"rank":73,"ratio":1.003},{"s":"GODFRYPHLP","k":"1860CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":16.844,"p":1779.5,"d":4.52,"pr":3.75,"pp":0.21,"av":56.55,"iv":43.12,"ch":-0.7,"pe":21.89,"hi":2995.0,"lo":1641.2,"cap":277.0,"pv":1.0,"vol":61.0,"oi":220.0,"rank":74,"ratio":1.311},{"s":"JUBLFOOD","k":"440CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":16.908,"p":422.9,"d":4.04,"pr":0.7,"pp":0.17,"av":39.55,"iv":34.96,"ch":0.2,"pe":75.7,"hi":612.9,"lo":397.8,"cap":279.0,"pv":1.1,"vol":232.0,"oi":1159.0,"rank":75,"ratio":1.131},{"s":"JIOFIN","k":"235CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":17.024,"p":225.17,"d":4.37,"pr":0.3,"pp":0.13,"av":34.2,"iv":34.72,"ch":-0.9,"pe":89.87,"hi":309.8,"lo":202.51,"cap":1540.0,"pv":1.1,"vol":143.0,"oi":1898.0,"rank":76,"ratio":0.985},{"s":"ADANIPOWER","k":"220CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":17.185,"p":209.64,"d":4.94,"pr":0.34,"pp":0.16,"av":46.62,"iv":38.83,"ch":-0.2,"pe":21.23,"hi":254.2,"lo":128.1,"cap":4051.0,"pv":0.8,"vol":116.0,"oi":1289.0,"rank":77,"ratio":1.201},{"s":"COCHINSHIP","k":"1180CE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":17.514,"p":1131.6,"d":4.28,"pr":2.3,"pp":0.2,"av":49.67,"iv":36.79,"ch":-0.6,"pe":47.85,"hi":1842.8,"lo":1101.2,"cap":298.0,"pv":0.8,"vol":107.0,"oi":616.0,"rank":78,"ratio":1.35},{"s":"ALKEM","k":"5350CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":17.534,"p":5131.5,"d":4.26,"pr":5.65,"pp":0.11,"av":26.75,"iv":33.63,"ch":-0.3,"pe":29.84,"hi":5933.5,"lo":4811.0,"cap":613.0,"pv":0.8,"vol":153.0,"oi":415.0,"rank":79,"ratio":0.795},{"s":"FORTIS","k":"850CE","x":"23-Nov-2026","er":"NO","sec":"HEALTHCARE","sc":17.542,"p":815.95,"d":4.17,"pr":1.2,"pp":0.15,"av":34.96,"iv":35.5,"ch":0.8,"pe":56.42,"hi":1010.1,"lo":704.95,"cap":616.0,"pv":1.8,"vol":31.0,"oi":252.0,"rank":80,"ratio":0.985},{"s":"DLF","k":"800CE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":17.587,"p":768.25,"d":4.13,"pr":1.2,"pp":0.16,"av":36.68,"iv":33.32,"ch":0.1,"pe":41.42,"hi":773.65,"lo":489.4,"cap":1902.0,"pv":1.2,"vol":197.0,"oi":1218.0,"rank":81,"ratio":1.101},{"s":"JSWSTEEL","k":"1350CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":17.702,"p":1289.2,"d":4.72,"pr":1.45,"pp":0.11,"av":29.99,"iv":33.67,"ch":-3.5,"pe":10.15,"hi":1370.0,"lo":1073.2,"cap":3153.0,"pv":2.8,"vol":58.0,"oi":677.0,"rank":82,"ratio":0.891},{"s":"PGEL","k":"600CE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":18.248,"p":575.45,"d":4.27,"pr":1.4,"pp":0.24,"av":56.93,"iv":39.4,"ch":-0.5,"pe":71.35,"hi":644.4,"lo":436.55,"cap":165.0,"pv":1.5,"vol":308.0,"oi":654.0,"rank":83,"ratio":1.445},{"s":"MOTHERSON","k":"170CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":18.472,"p":162.87,"d":4.38,"pr":0.29,"pp":0.18,"av":42.22,"iv":37.57,"ch":-1.7,"pe":33.68,"hi":173.27,"lo":102.82,"cap":1716.0,"pv":0.9,"vol":175.0,"oi":1214.0,"rank":84,"ratio":1.124},{"s":"HAVELLS","k":"1260CE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":18.578,"p":1208.7,"d":4.24,"pr":1.7,"pp":0.14,"av":32.1,"iv":36.89,"ch":0.3,"pe":43.04,"hi":1514.7,"lo":999.2,"cap":756.0,"pv":1.7,"vol":26.0,"oi":163.0,"rank":85,"ratio":0.87},{"s":"HEROMOTOCO","k":"5750CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":18.898,"p":5515.0,"d":4.26,"pr":7.9,"pp":0.14,"av":32.29,"iv":33.23,"ch":-0.8,"pe":17.44,"hi":6388.5,"lo":4671.5,"cap":1104.0,"pv":0.9,"vol":76.0,"oi":476.0,"rank":86,"ratio":0.972},{"s":"TATAELXSI","k":"3950CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":19.106,"p":3771.5,"d":4.73,"pr":5.85,"pp":0.16,"av":38.4,"iv":42.44,"ch":0.7,"pe":34.12,"hi":5950.0,"lo":2996.0,"cap":234.0,"pv":2.0,"vol":26.0,"oi":368.0,"rank":87,"ratio":0.905},{"s":"LODHA","k":"1240CE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":19.273,"p":1191.1,"d":4.11,"pr":2.7,"pp":0.23,"av":48.34,"iv":36.0,"ch":-1.2,"pe":27.49,"hi":1344.95,"lo":650.8,"cap":1188.0,"pv":1.6,"vol":74.0,"oi":376.0,"rank":88,"ratio":1.343},{"s":"KPITTECH","k":"550CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":19.474,"p":527.6,"d":4.25,"pr":1.15,"pp":0.22,"av":47.57,"iv":40.83,"ch":1.0,"pe":26.81,"hi":1284.9,"lo":470.1,"cap":145.0,"pv":2.4,"vol":59.0,"oi":1026.0,"rank":89,"ratio":1.165},{"s":"ADANIENSOL","k":"1540CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":19.58,"p":1479.9,"d":4.06,"pr":3.6,"pp":0.24,"av":50.44,"iv":38.72,"ch":0.6,"pe":46.76,"hi":1789.0,"lo":803.1,"cap":1812.0,"pv":1.4,"vol":37.0,"oi":191.0,"rank":90,"ratio":1.303},{"s":"SBICARD","k":"600CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":19.615,"p":574.0,"d":4.53,"pr":0.85,"pp":0.15,"av":34.2,"iv":35.12,"ch":0.4,"pe":20.49,"hi":906.4,"lo":519.05,"cap":547.0,"pv":1.8,"vol":109.0,"oi":1304.0,"rank":91,"ratio":0.974},{"s":"CDSL","k":"1480CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":19.669,"p":1420.5,"d":4.19,"pr":2.65,"pp":0.19,"av":39.74,"iv":36.63,"ch":0.0,"pe":58.78,"hi":1673.7,"lo":1116.3,"cap":298.0,"pv":1.1,"vol":203.0,"oi":1198.0,"rank":92,"ratio":1.085},{"s":"MFSL","k":"1460CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":20.058,"p":1396.8,"d":4.52,"pr":2.25,"pp":0.16,"av":36.3,"iv":35.49,"ch":-0.3,"pe":211.51,"hi":1892.5,"lo":1172.6,"cap":481.0,"pv":1.8,"vol":12.0,"oi":310.0,"rank":93,"ratio":1.023},{"s":"APOLLOHOSP","k":"9300CE","x":"23-Nov-2026","er":"NO","sec":"HEALTHCARE","sc":20.295,"p":8942.0,"d":4.0,"pr":12.05,"pp":0.13,"av":26.56,"iv":32.99,"ch":2.3,"pe":54.26,"hi":9070.5,"lo":6696.5,"cap":1286.0,"pv":1.7,"vol":614.0,"oi":496.0,"rank":94,"ratio":0.805},{"s":"CAMS","k":"750CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":20.677,"p":718.2,"d":4.43,"pr":1.3,"pp":0.18,"av":38.78,"iv":36.24,"ch":0.5,"pe":35.04,"hi":844.9,"lo":611.4,"cap":178.0,"pv":1.2,"vol":7.0,"oi":406.0,"rank":95,"ratio":1.07},{"s":"ADANIENT","k":"2800CE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":20.939,"p":2691.1,"d":4.05,"pr":6.3,"pp":0.23,"av":45.28,"iv":38.69,"ch":-0.4,"pe":68.3,"hi":3245.0,"lo":1753.0,"cap":3645.0,"pv":1.0,"vol":613.0,"oi":2882.0,"rank":96,"ratio":1.17},{"s":"LUPIN","k":"2100CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":21.018,"p":2002.6,"d":4.86,"pr":2.25,"pp":0.11,"av":25.98,"iv":35.5,"ch":0.1,"pe":17.27,"hi":2529.5,"lo":1892.9,"cap":915.0,"pv":0.8,"vol":15.0,"oi":1216.0,"rank":97,"ratio":0.732},{"s":"PERSISTENT","k":"6300CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":21.201,"p":6005.0,"d":4.91,"pr":10.6,"pp":0.18,"av":40.88,"iv":41.19,"ch":2.0,"pe":53.86,"hi":6599.0,"lo":4244.5,"cap":995.0,"pv":3.0,"vol":136.0,"oi":1104.0,"rank":98,"ratio":0.992},{"s":"BSE","k":"3900CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":21.444,"p":3719.6,"d":4.85,"pr":8.2,"pp":0.22,"av":49.86,"iv":41.7,"ch":-1.1,"pe":49.86,"hi":4446.8,"lo":2377.4,"cap":1518.0,"pv":1.0,"vol":709.0,"oi":5390.0,"rank":99,"ratio":1.196},{"s":"WIPRO","k":"195CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":21.621,"p":186.39,"d":4.62,"pr":0.28,"pp":0.15,"av":32.1,"iv":37.25,"ch":1.3,"pe":13.87,"hi":273.1,"lo":156.79,"cap":1846.0,"pv":3.0,"vol":271.0,"oi":1044.0,"rank":100,"ratio":0.862},{"s":"MANKIND","k":"2740CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":21.712,"p":2630.0,"d":4.18,"pr":4.75,"pp":0.18,"av":34.77,"iv":31.68,"ch":0.0,"pe":47.9,"hi":2705.0,"lo":1909.7,"cap":1086.0,"pv":0.7,"vol":16.0,"oi":211.0,"rank":101,"ratio":1.098},{"s":"TATASTEEL","k":"182.5CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":22.529,"p":174.62,"d":4.51,"pr":0.28,"pp":0.16,"av":32.1,"iv":35.19,"ch":-3.1,"pe":18.97,"hi":224.4,"lo":160.06,"cap":2188.0,"pv":2.5,"vol":845.0,"oi":1269.0,"rank":102,"ratio":0.912},{"s":"RVNL","k":"202.5CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":22.939,"p":193.77,"d":4.51,"pr":0.45,"pp":0.23,"av":45.66,"iv":41.57,"ch":-0.5,"pe":42.88,"hi":400.7,"lo":177.86,"cap":405.0,"pv":1.9,"vol":52.0,"oi":344.0,"rank":103,"ratio":1.098},{"s":"MUTHOOTFIN","k":"2650CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":23.071,"p":2530.8,"d":4.71,"pr":5.4,"pp":0.21,"av":43.56,"iv":41.96,"ch":-3.4,"pe":8.6,"hi":4149.5,"lo":2305.0,"cap":1016.0,"pv":2.3,"vol":523.0,"oi":1018.0,"rank":104,"ratio":1.038},{"s":"CGPOWER","k":"830CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":23.183,"p":793.25,"d":4.63,"pr":1.7,"pp":0.21,"av":42.8,"iv":40.99,"ch":-2.4,"pe":91.32,"hi":980.9,"lo":525.5,"cap":1250.0,"pv":1.5,"vol":86.0,"oi":559.0,"rank":105,"ratio":1.044},{"s":"PNB","k":"161CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":23.35,"p":153.78,"d":4.7,"pr":0.27,"pp":0.18,"av":35.34,"iv":42.44,"ch":-0.7,"pe":7.52,"hi":156.49,"lo":98.5,"cap":1768.0,"pv":1.1,"vol":48.0,"oi":81.0,"rank":106,"ratio":0.833},{"s":"LAURUSLABS","k":"2420CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":23.788,"p":2304.9,"d":4.99,"pr":4.45,"pp":0.19,"av":40.5,"iv":39.55,"ch":-0.1,"pe":94.19,"hi":2488.0,"lo":917.95,"cap":1245.0,"pv":1.1,"vol":198.0,"oi":872.0,"rank":107,"ratio":1.024},{"s":"BRITANNIA","k":"5050CE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":23.873,"p":4840.8,"d":4.32,"pr":6.95,"pp":0.14,"av":25.98,"iv":34.51,"ch":-0.5,"pe":41.98,"hi":6271.0,"lo":4499.9,"cap":1167.0,"pv":0.9,"vol":16.0,"oi":523.0,"rank":108,"ratio":0.753},{"s":"VEDL","k":"245CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":24.288,"p":233.48,"d":4.93,"pr":0.49,"pp":0.21,"av":42.6,"iv":41.13,"ch":-4.2,"pe":3.07,"hi":795.0,"lo":221.6,"cap":913.0,"pv":1.6,"vol":497.0,"oi":647.0,"rank":109,"ratio":1.036},{"s":"LAURUSLABS","k":"2400CE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":24.334,"p":2304.9,"d":4.13,"pr":5.5,"pp":0.24,"av":40.5,"iv":37.3,"ch":-0.1,"pe":94.19,"hi":2488.0,"lo":917.95,"cap":1245.0,"pv":1.1,"vol":486.0,"oi":3046.0,"rank":110,"ratio":1.086},{"s":"ASHOKLEY","k":"172.5CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":24.375,"p":165.0,"d":4.55,"pr":0.38,"pp":0.23,"av":42.99,"iv":42.18,"ch":-0.1,"pe":25.09,"hi":215.42,"lo":138.03,"cap":969.0,"pv":1.2,"vol":193.0,"oi":1077.0,"rank":111,"ratio":1.019},{"s":"SUZLON","k":"38CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":25.269,"p":36.49,"d":4.14,"pr":0.1,"pp":0.27,"av":44.9,"iv":40.32,"ch":-1.0,"pe":21.99,"hi":60.45,"lo":33.15,"cap":503.0,"pv":0.7,"vol":80.0,"oi":2187.0,"rank":112,"ratio":1.114},{"s":"UNIONBANK","k":"217.5CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":25.932,"p":208.2,"d":4.47,"pr":0.48,"pp":0.23,"av":39.74,"iv":43.46,"ch":-0.9,"pe":7.21,"hi":210.57,"lo":145.87,"cap":1588.0,"pv":1.4,"vol":16.0,"oi":275.0,"rank":113,"ratio":0.914},{"s":"PNB","k":"160CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":26.019,"p":153.78,"d":4.04,"pr":0.35,"pp":0.23,"av":35.34,"iv":39.5,"ch":-0.7,"pe":7.52,"hi":156.49,"lo":98.5,"cap":1768.0,"pv":1.1,"vol":200.0,"oi":681.0,"rank":114,"ratio":0.895},{"s":"HYUNDAI","k":"2320CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":26.312,"p":2219.3,"d":4.54,"pr":4.35,"pp":0.2,"av":33.82,"iv":33.42,"ch":-0.1,"pe":37.25,"hi":2463.5,"lo":1658.0,"cap":1801.0,"pv":0.9,"vol":3.0,"oi":79.0,"rank":115,"ratio":1.012},{"s":"NATIONALUM","k":"310CE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":26.582,"p":297.2,"d":4.31,"pr":0.9,"pp":0.3,"av":49.1,"iv":40.19,"ch":-3.2,"pe":7.91,"hi":445.15,"lo":249.4,"cap":546.0,"pv":2.2,"vol":250.0,"oi":675.0,"rank":116,"ratio":1.222},{"s":"INDUSINDBK","k":"970CE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":27.23,"p":928.2,"d":4.5,"pr":2.2,"pp":0.24,"av":39.17,"iv":38.34,"ch":0.3,"pe":23.67,"hi":1077.85,"lo":750.5,"cap":722.0,"pv":2.7,"vol":28.0,"oi":323.0,"rank":117,"ratio":1.022},{"s":"MCX","k":"3750CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":27.274,"p":3579.8,"d":4.75,"pr":9.7,"pp":0.27,"av":47.19,"iv":45.14,"ch":-1.9,"pe":100.0,"hi":3774.0,"lo":1929.9,"cap":912.0,"pv":1.5,"vol":591.0,"oi":1966.0,"rank":118,"ratio":1.045},{"s":"VMM","k":"95CE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":27.402,"p":90.75,"d":4.68,"pr":0.2,"pp":0.22,"av":37.64,"iv":41.52,"ch":-1.3,"pe":47.1,"hi":139.5,"lo":84.16,"cap":425.0,"pv":0.9,"vol":8.0,"oi":253.0,"rank":119,"ratio":0.907},{"s":"TIINDIA","k":"2300CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":27.549,"p":2207.4,"d":4.19,"pr":6.1,"pp":0.28,"av":42.03,"iv":40.96,"ch":-1.7,"pe":34.81,"hi":3335.2,"lo":2005.2,"cap":428.0,"pv":1.7,"vol":188.0,"oi":953.0,"rank":120,"ratio":1.026},{"s":"TCS","k":"2500CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":27.64,"p":2387.3,"d":4.72,"pr":4.7,"pp":0.2,"av":33.62,"iv":39.9,"ch":1.7,"pe":16.6,"hi":3350.0,"lo":1976.8,"cap":8622.0,"pv":3.2,"vol":1266.0,"oi":7766.0,"rank":121,"ratio":0.843},{"s":"IEX","k":"120CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":28.259,"p":114.83,"d":4.5,"pr":0.31,"pp":0.27,"av":42.99,"iv":44.13,"ch":-0.4,"pe":19.61,"hi":160.27,"lo":99.5,"cap":102.0,"pv":1.1,"vol":53.0,"oi":789.0,"rank":122,"ratio":0.974},{"s":"PRESTIGE","k":"1740CE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":28.574,"p":1658.2,"d":4.93,"pr":4.15,"pp":0.25,"av":43.18,"iv":44.06,"ch":0.2,"pe":67.09,"hi":1741.5,"lo":1090.0,"cap":714.0,"pv":1.8,"vol":7.0,"oi":371.0,"rank":123,"ratio":0.98},{"s":"INFY","k":"1154CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":30.093,"p":1103.8,"d":4.55,"pr":2.65,"pp":0.24,"av":36.3,"iv":42.54,"ch":1.0,"pe":14.62,"hi":1728.0,"lo":980.4,"cap":4478.0,"pv":2.0,"vol":625.0,"oi":6190.0,"rank":124,"ratio":0.853},{"s":"ATHERENERG","k":"2020CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":30.142,"p":1933.0,"d":4.5,"pr":7.05,"pp":0.36,"av":54.45,"iv":46.95,"ch":0.4,"pe":100.0,"hi":2021.5,"lo":589.0,"cap":767.0,"pv":1.3,"vol":19.0,"oi":297.0,"rank":125,"ratio":1.16},{"s":"MOTILALOFS","k":"1260CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":30.692,"p":1211.35,"d":4.02,"pr":4.7,"pp":0.39,"av":50.82,"iv":42.77,"ch":0.1,"pe":27.42,"hi":1277.8,"lo":614.9,"cap":730.0,"pv":2.0,"vol":32.0,"oi":428.0,"rank":126,"ratio":1.188},{"s":"INOXWIND","k":"59CE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":31.459,"p":56.42,"d":4.57,"pr":0.21,"pp":0.37,"av":54.07,"iv":47.63,"ch":-1.2,"pe":27.23,"hi":142.37,"lo":55.1,"cap":97.0,"pv":2.5,"vol":14.0,"oi":227.0,"rank":127,"ratio":1.135},{"s":"VOLTAS","k":"1300CE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":31.693,"p":1247.9,"d":4.18,"pr":3.85,"pp":0.31,"av":40.69,"iv":46.11,"ch":0.8,"pe":81.91,"hi":1582.5,"lo":930.5,"cap":413.0,"pv":1.4,"vol":607.0,"oi":605.0,"rank":128,"ratio":0.882},{"s":"AMBER","k":"7000CE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":31.744,"p":6702.5,"d":4.44,"pr":25.45,"pp":0.38,"av":53.11,"iv":43.95,"ch":0.1,"pe":246.15,"hi":8974.0,"lo":5400.5,"cap":237.0,"pv":1.9,"vol":672.0,"oi":1374.0,"rank":129,"ratio":1.208},{"s":"OFSS","k":"10250CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":31.812,"p":9836.5,"d":4.2,"pr":29.75,"pp":0.3,"av":39.93,"iv":40.02,"ch":0.1,"pe":23.67,"hi":12540.0,"lo":6234.5,"cap":858.0,"pv":1.3,"vol":137.0,"oi":690.0,"rank":130,"ratio":0.998},{"s":"PAYTM","k":"1820CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":34.783,"p":1747.8,"d":4.13,"pr":7.65,"pp":0.44,"av":51.97,"iv":47.16,"ch":1.1,"pe":142.33,"hi":1960.0,"lo":930.6,"cap":1121.0,"pv":1.4,"vol":403.0,"oi":687.0,"rank":131,"ratio":1.102},{"s":"ANGELONE","k":"355CE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":35.461,"p":338.7,"d":4.81,"pr":1.25,"pp":0.37,"av":50.06,"iv":51.38,"ch":0.6,"pe":26.8,"hi":379.15,"lo":208.63,"cap":310.0,"pv":2.4,"vol":128.0,"oi":602.0,"rank":132,"ratio":0.974},{"s":"UPL","k":"595CE","x":"23-Nov-2026","er":"NO","sec":"CHEMICALS","sc":35.975,"p":569.5,"d":4.48,"pr":1.8,"pp":0.32,"av":39.36,"iv":45.98,"ch":-0.2,"pe":21.54,"hi":812.2,"lo":476.45,"cap":480.0,"pv":1.1,"vol":61.0,"oi":278.0,"rank":133,"ratio":0.856},{"s":"IRFC","k":"88CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":37.665,"p":84.12,"d":4.61,"pr":0.26,"pp":0.31,"av":37.83,"iv":45.66,"ch":-0.6,"pe":14.38,"hi":137.17,"lo":73.05,"cap":1094.0,"pv":2.0,"vol":55.0,"oi":559.0,"rank":134,"ratio":0.829},{"s":"ENRIN","k":"3050CE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":39.434,"p":2905.0,"d":4.99,"pr":10.0,"pp":0.34,"av":43.56,"iv":48.37,"ch":-3.5,"pe":70.96,"hi":3968.0,"lo":2115.0,"cap":1034.0,"pv":2.4,"vol":81.0,"oi":168.0,"rank":135,"ratio":0.901},{"s":"MARUTI","k":"14300CE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":40.496,"p":13686.0,"d":4.49,"pr":37.5,"pp":0.27,"av":30.38,"iv":42.93,"ch":0.9,"pe":29.53,"hi":17370.0,"lo":10985.0,"cap":4312.0,"pv":2.3,"vol":1919.0,"oi":829.0,"rank":136,"ratio":0.708},{"s":"LTM","k":"4400CE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":55.241,"p":4200.9,"d":4.74,"pr":18.8,"pp":0.45,"av":38.4,"iv":50.44,"ch":2.7,"pe":23.27,"hi":6429.5,"lo":3528.0,"cap":1242.0,"pv":3.3,"vol":545.0,"oi":1091.0,"rank":137,"ratio":0.761},{"s":"MAXHEALTH","k":"1130CE","x":"23-Nov-2026","er":"NO","sec":"HEALTHCARE","sc":56.066,"p":1078.25,"d":4.8,"pr":4.5,"pp":0.42,"av":35.73,"iv":49.28,"ch":3.5,"pe":72.11,"hi":1185.4,"lo":797.0,"cap":1048.0,"pv":2.6,"vol":542.0,"oi":256.0,"rank":138,"ratio":0.725},{"s":"IREDA","k":"138CE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":87.967,"p":132.08,"d":4.48,"pr":1.11,"pp":0.84,"av":42.8,"iv":64.8,"ch":1.6,"pe":17.1,"hi":149.48,"lo":98.78,"cap":370.0,"pv":3.4,"vol":29.0,"oi":121.0,"rank":139,"ratio":0.66}],"puts":[{"s":"BHARTIARTL","k":"2040PE","x":"23-Nov-2026","er":"NO","sec":"TELECOM","sc":0.843,"p":2142.0,"d":4.76,"pr":0.1,"pp":0.0,"av":26.36,"iv":22.78,"ch":-0.1,"pe":34.58,"hi":2174.5,"lo":1726.3,"cap":13373.0,"pv":1.2,"vol":22.0,"oi":1480.0,"rank":1,"ratio":1.157},{"s":"HDFCLIFE","k":"550PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":1.409,"p":578.45,"d":4.92,"pr":0.05,"pp":0.01,"av":30.19,"iv":25.05,"ch":0.1,"pe":61.04,"hi":788.5,"lo":508.05,"cap":1256.0,"pv":2.1,"vol":5.0,"oi":514.0,"rank":2,"ratio":1.205},{"s":"HINDUNILVR","k":"1960PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":2.049,"p":2050.9,"d":4.43,"pr":0.25,"pp":0.01,"av":26.36,"iv":23.27,"ch":-1.2,"pe":31.07,"hi":2488.0,"lo":1758.2,"cap":4816.0,"pv":0.8,"vol":27.0,"oi":795.0,"rank":3,"ratio":1.133},{"s":"BOSCHLTD","k":"47000PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":2.473,"p":49280.0,"d":4.63,"pr":8.85,"pp":0.02,"av":33.62,"iv":26.16,"ch":-0.2,"pe":54.75,"hi":52475.0,"lo":28610.0,"cap":1455.0,"pv":0.8,"vol":10.0,"oi":332.0,"rank":4,"ratio":1.285},{"s":"SRF","k":"2400PE","x":"23-Nov-2026","er":"NO","sec":"CHEMICALS","sc":3.146,"p":2524.0,"d":4.91,"pr":0.55,"pp":0.02,"av":34.01,"iv":27.8,"ch":0.6,"pe":31.75,"hi":3143.0,"lo":2178.3,"cap":749.0,"pv":1.3,"vol":15.0,"oi":675.0,"rank":5,"ratio":1.223},{"s":"LT","k":"3950PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":3.187,"p":4149.0,"d":4.8,"pr":0.8,"pp":0.02,"av":29.04,"iv":27.12,"ch":-1.5,"pe":27.39,"hi":4440.0,"lo":3288.1,"cap":5708.0,"pv":0.8,"vol":200.0,"oi":1164.0,"rank":6,"ratio":1.071},{"s":"BEL","k":"385PE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":3.253,"p":401.75,"d":4.17,"pr":0.1,"pp":0.02,"av":31.91,"iv":27.45,"ch":-0.6,"pe":45.2,"hi":473.45,"lo":354.55,"cap":2937.0,"pv":0.7,"vol":66.0,"oi":603.0,"rank":7,"ratio":1.162},{"s":"AXISBANK","k":"1320PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":3.256,"p":1380.0,"d":4.35,"pr":0.3,"pp":0.02,"av":29.04,"iv":24.69,"ch":-0.0,"pe":14.14,"hi":1418.3,"lo":1150.3,"cap":4299.0,"pv":0.9,"vol":170.0,"oi":1031.0,"rank":8,"ratio":1.176},{"s":"ASIANPAINT","k":"2480PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":3.938,"p":2592.1,"d":4.32,"pr":0.65,"pp":0.03,"av":27.51,"iv":24.8,"ch":-0.0,"pe":50.47,"hi":2985.7,"lo":2115.0,"cap":2488.0,"pv":0.9,"vol":40.0,"oi":566.0,"rank":9,"ratio":1.109},{"s":"DABUR","k":"375PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":4.266,"p":393.7,"d":4.75,"pr":0.1,"pp":0.03,"av":28.28,"iv":26.77,"ch":0.8,"pe":33.63,"hi":534.0,"lo":354.3,"cap":698.0,"pv":1.2,"vol":94.0,"oi":422.0,"rank":10,"ratio":1.056},{"s":"BPCL","k":"290PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":4.548,"p":304.6,"d":4.79,"pr":0.1,"pp":0.03,"av":34.58,"iv":29.1,"ch":-1.1,"pe":8.39,"hi":391.65,"lo":266.6,"cap":1322.0,"pv":1.1,"vol":18.0,"oi":721.0,"rank":11,"ratio":1.188},{"s":"MARICO","k":"880PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":5.113,"p":919.1,"d":4.25,"pr":0.3,"pp":0.03,"av":27.13,"iv":25.87,"ch":-0.2,"pe":56.69,"hi":925.0,"lo":707.25,"cap":1192.0,"pv":0.9,"vol":13.0,"oi":297.0,"rank":12,"ratio":1.049},{"s":"RELIANCE","k":"1300PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":5.231,"p":1362.7,"d":4.6,"pr":0.45,"pp":0.03,"av":29.04,"iv":29.26,"ch":-1.0,"pe":19.29,"hi":1611.8,"lo":1152.2,"cap":18437.0,"pv":0.6,"vol":386.0,"oi":14390.0,"rank":13,"ratio":0.992},{"s":"RBLBANK","k":"370PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":5.307,"p":386.25,"d":4.21,"pr":0.2,"pp":0.05,"av":41.08,"iv":29.46,"ch":-0.8,"pe":49.94,"hi":429.6,"lo":287.2,"cap":599.0,"pv":2.1,"vol":61.0,"oi":351.0,"rank":14,"ratio":1.394},{"s":"PFC","k":"315PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":5.513,"p":329.55,"d":4.42,"pr":0.15,"pp":0.05,"av":36.49,"iv":29.72,"ch":-0.5,"pe":3.19,"hi":486.5,"lo":310.3,"cap":1088.0,"pv":0.8,"vol":31.0,"oi":867.0,"rank":15,"ratio":1.228},{"s":"KOTAKBANK","k":"480PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":5.549,"p":505.25,"d":5.0,"pr":0.15,"pp":0.03,"av":26.75,"iv":30.12,"ch":0.5,"pe":22.92,"hi":505.6,"lo":345.5,"cap":5027.0,"pv":1.3,"vol":21.0,"oi":1027.0,"rank":16,"ratio":0.888},{"s":"BAJFINANCE","k":"1040PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":5.669,"p":1089.35,"d":4.53,"pr":0.5,"pp":0.05,"av":36.68,"iv":28.5,"ch":-0.3,"pe":31.43,"hi":1176.4,"lo":787.9,"cap":6907.0,"pv":1.1,"vol":76.0,"oi":872.0,"rank":17,"ratio":1.287},{"s":"KOTAKBANK","k":"485PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":5.934,"p":505.25,"d":4.01,"pr":0.2,"pp":0.04,"av":26.75,"iv":27.55,"ch":0.5,"pe":22.92,"hi":505.6,"lo":345.5,"cap":5027.0,"pv":1.3,"vol":150.0,"oi":703.0,"rank":18,"ratio":0.971},{"s":"BIOCON","k":"345PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":6.002,"p":362.6,"d":4.85,"pr":0.15,"pp":0.04,"av":33.43,"iv":32.61,"ch":0.1,"pe":173.34,"hi":447.15,"lo":318.4,"cap":593.0,"pv":0.9,"vol":3.0,"oi":249.0,"rank":19,"ratio":1.025},{"s":"DLF","k":"730PE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":6.185,"p":768.25,"d":4.98,"pr":0.35,"pp":0.05,"av":36.68,"iv":33.22,"ch":0.1,"pe":41.42,"hi":773.65,"lo":489.4,"cap":1902.0,"pv":1.2,"vol":11.0,"oi":670.0,"rank":20,"ratio":1.104},{"s":"ETERNAL","k":"345PE","x":"23-Nov-2026","er":"NO","sec":"INTERNET","sc":6.36,"p":361.85,"d":4.66,"pr":0.2,"pp":0.06,"av":40.5,"iv":31.09,"ch":-1.1,"pe":716.44,"hi":378.0,"lo":212.6,"cap":3500.0,"pv":1.1,"vol":111.0,"oi":861.0,"rank":21,"ratio":1.303},{"s":"IOC","k":"140PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":6.392,"p":146.11,"d":4.18,"pr":0.07,"pp":0.05,"av":31.33,"iv":26.66,"ch":-1.2,"pe":4.06,"hi":188.96,"lo":124.92,"cap":2061.0,"pv":1.1,"vol":23.0,"oi":506.0,"rank":22,"ratio":1.175},{"s":"POWERGRID","k":"250PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":6.879,"p":262.8,"d":4.87,"pr":0.1,"pp":0.04,"av":26.94,"iv":30.49,"ch":-0.6,"pe":14.88,"hi":324.95,"lo":242.3,"cap":2445.0,"pv":0.7,"vol":11.0,"oi":832.0,"rank":23,"ratio":0.884},{"s":"TATACONSUM","k":"1100PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":6.923,"p":1153.9,"d":4.67,"pr":0.5,"pp":0.04,"av":29.23,"iv":29.73,"ch":0.8,"pe":65.61,"hi":1282.7,"lo":916.0,"cap":1142.0,"pv":1.9,"vol":58.0,"oi":475.0,"rank":24,"ratio":0.983},{"s":"GAIL","k":"182.5PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":6.94,"p":190.55,"d":4.22,"pr":0.1,"pp":0.05,"av":31.91,"iv":29.03,"ch":-0.8,"pe":9.91,"hi":192.3,"lo":134.36,"cap":1253.0,"pv":0.6,"vol":3.0,"oi":236.0,"rank":25,"ratio":1.099},{"s":"SBIN","k":"1100PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":7.279,"p":1149.05,"d":4.27,"pr":0.55,"pp":0.05,"av":28.08,"iv":28.26,"ch":-0.7,"pe":11.59,"hi":1234.7,"lo":933.9,"cap":10592.0,"pv":0.5,"vol":819.0,"oi":4801.0,"rank":26,"ratio":0.994},{"s":"VBL","k":"400PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":7.601,"p":419.65,"d":4.68,"pr":0.25,"pp":0.06,"av":36.68,"iv":32.64,"ch":-0.1,"pe":41.09,"hi":555.8,"lo":381.0,"cap":1420.0,"pv":0.8,"vol":4.0,"oi":455.0,"rank":27,"ratio":1.124},{"s":"BAJAJ-AUTO","k":"10400PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":8.215,"p":10896.0,"d":4.55,"pr":5.9,"pp":0.05,"av":29.99,"iv":33.63,"ch":0.7,"pe":22.67,"hi":12470.0,"lo":8624.0,"cap":2995.0,"pv":1.6,"vol":127.0,"oi":1252.0,"rank":28,"ratio":0.892},{"s":"360ONE","k":"1160PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":8.255,"p":1212.0,"d":4.29,"pr":0.9,"pp":0.07,"av":38.59,"iv":31.51,"ch":1.2,"pe":41.66,"hi":1236.2,"lo":906.05,"cap":520.0,"pv":2.0,"vol":14.0,"oi":167.0,"rank":29,"ratio":1.225},{"s":"HDFCBANK","k":"790PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":8.272,"p":827.3,"d":4.51,"pr":0.4,"pp":0.05,"av":26.36,"iv":32.54,"ch":0.6,"pe":15.57,"hi":1017.5,"lo":669.2,"cap":12764.0,"pv":1.8,"vol":557.0,"oi":7458.0,"rank":30,"ratio":0.81},{"s":"BANKBARODA","k":"272.5PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":8.371,"p":284.85,"d":4.34,"pr":0.19,"pp":0.07,"av":34.58,"iv":30.49,"ch":-0.3,"pe":7.24,"hi":325.5,"lo":223.82,"cap":1474.0,"pv":1.3,"vol":60.0,"oi":336.0,"rank":31,"ratio":1.134},{"s":"HDFCAMC","k":"2600PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":8.4,"p":2717.9,"d":4.34,"pr":2.0,"pp":0.07,"av":38.02,"iv":32.1,"ch":1.1,"pe":38.17,"hi":2901.5,"lo":2205.6,"cap":1166.0,"pv":3.0,"vol":99.0,"oi":432.0,"rank":32,"ratio":1.184},{"s":"INDHOTEL","k":"850PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":8.655,"p":894.45,"d":4.97,"pr":0.5,"pp":0.06,"av":32.1,"iv":32.82,"ch":0.4,"pe":52.55,"hi":909.65,"lo":565.0,"cap":1272.0,"pv":1.3,"vol":10.0,"oi":450.0,"rank":33,"ratio":0.978},{"s":"FEDERALBNK","k":"345PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":8.91,"p":362.8,"d":4.91,"pr":0.2,"pp":0.06,"av":30.38,"iv":33.05,"ch":-0.5,"pe":17.18,"hi":371.7,"lo":242.3,"cap":897.0,"pv":0.7,"vol":3.0,"oi":489.0,"rank":34,"ratio":0.919},{"s":"ULTRACEMCO","k":"12100PE","x":"23-Nov-2026","er":"NO","sec":"CEMENT_BUILDING","sc":9.084,"p":12712.0,"d":4.81,"pr":6.65,"pp":0.05,"av":27.7,"iv":32.8,"ch":1.3,"pe":41.45,"hi":13110.0,"lo":10325.0,"cap":3749.0,"pv":1.9,"vol":29.0,"oi":223.0,"rank":35,"ratio":0.845},{"s":"ULTRACEMCO","k":"12200PE","x":"23-Nov-2026","er":"NO","sec":"CEMENT_BUILDING","sc":9.442,"p":12712.0,"d":4.03,"pr":8.25,"pp":0.06,"av":27.7,"iv":28.95,"ch":1.3,"pe":41.45,"hi":13110.0,"lo":10325.0,"cap":3749.0,"pv":1.9,"vol":150.0,"oi":813.0,"rank":36,"ratio":0.957},{"s":"HAL","k":"4550PE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":9.694,"p":4758.0,"d":4.37,"pr":3.65,"pp":0.08,"av":34.58,"iv":31.08,"ch":-0.2,"pe":32.61,"hi":5149.9,"lo":3479.1,"cap":3177.0,"pv":0.7,"vol":23.0,"oi":86.0,"rank":37,"ratio":1.113},{"s":"INDIANB","k":"900PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":10.499,"p":938.5,"d":4.1,"pr":0.9,"pp":0.1,"av":37.45,"iv":32.8,"ch":-0.9,"pe":9.55,"hi":1000.9,"lo":764.05,"cap":1264.0,"pv":1.4,"vol":32.0,"oi":300.0,"rank":38,"ratio":1.142},{"s":"BHEL","k":"410PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":10.58,"p":427.75,"d":4.15,"pr":0.5,"pp":0.12,"av":45.85,"iv":38.16,"ch":-1.7,"pe":51.01,"hi":464.0,"lo":239.17,"cap":1489.0,"pv":1.0,"vol":316.0,"oi":992.0,"rank":39,"ratio":1.202},{"s":"LAURUSLABS","k":"2200PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":10.723,"p":2304.9,"d":4.55,"pr":2.2,"pp":0.1,"av":40.5,"iv":36.55,"ch":-0.1,"pe":94.19,"hi":2488.0,"lo":917.95,"cap":1245.0,"pv":1.1,"vol":254.0,"oi":1735.0,"rank":40,"ratio":1.108},{"s":"APOLLOHOSP","k":"8500PE","x":"23-Nov-2026","er":"NO","sec":"HEALTHCARE","sc":10.816,"p":8942.0,"d":4.94,"pr":5.2,"pp":0.06,"av":26.56,"iv":33.08,"ch":2.3,"pe":54.26,"hi":9070.5,"lo":6696.5,"cap":1286.0,"pv":1.7,"vol":186.0,"oi":1136.0,"rank":41,"ratio":0.803},{"s":"IDFCFIRSTB","k":"81PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":11.056,"p":85.25,"d":4.99,"pr":0.07,"pp":0.08,"av":37.06,"iv":38.5,"ch":-0.9,"pe":23.66,"hi":89.61,"lo":58.08,"cap":736.0,"pv":0.8,"vol":5.0,"oi":281.0,"rank":42,"ratio":0.963},{"s":"CHOLAFIN","k":"1760PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":11.539,"p":1851.0,"d":4.92,"pr":1.75,"pp":0.09,"av":40.31,"iv":37.57,"ch":-1.2,"pe":25.85,"hi":1952.5,"lo":1299.4,"cap":1589.0,"pv":1.6,"vol":34.0,"oi":206.0,"rank":43,"ratio":1.073},{"s":"DRREDDY","k":"1340PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":11.571,"p":1396.8,"d":4.07,"pr":1.1,"pp":0.08,"av":27.7,"iv":29.96,"ch":-0.3,"pe":42.32,"hi":1414.9,"lo":1101.0,"cap":1166.0,"pv":0.9,"vol":3.0,"oi":398.0,"rank":44,"ratio":0.925},{"s":"ALKEM","k":"4900PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":11.664,"p":5131.5,"d":4.51,"pr":3.55,"pp":0.07,"av":26.75,"iv":31.88,"ch":-0.3,"pe":29.84,"hi":5933.5,"lo":4811.0,"cap":613.0,"pv":0.8,"vol":8.0,"oi":101.0,"rank":45,"ratio":0.839},{"s":"DRREDDY","k":"1330PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":11.736,"p":1396.8,"d":4.78,"pr":0.95,"pp":0.07,"av":27.7,"iv":34.85,"ch":-0.3,"pe":42.32,"hi":1414.9,"lo":1101.0,"cap":1166.0,"pv":0.9,"vol":2.0,"oi":298.0,"rank":46,"ratio":0.795},{"s":"JIOFIN","k":"215PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":11.739,"p":225.17,"d":4.52,"pr":0.2,"pp":0.09,"av":34.2,"iv":31.26,"ch":-0.9,"pe":89.87,"hi":309.8,"lo":202.51,"cap":1540.0,"pv":1.1,"vol":4.0,"oi":994.0,"rank":47,"ratio":1.094},{"s":"HYUNDAI","k":"2120PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":11.911,"p":2219.3,"d":4.47,"pr":2.0,"pp":0.09,"av":33.82,"iv":34.63,"ch":-0.1,"pe":37.25,"hi":2463.5,"lo":1658.0,"cap":1801.0,"pv":0.9,"vol":2.0,"oi":198.0,"rank":48,"ratio":0.977},{"s":"NAM-INDIA","k":"1000PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":11.956,"p":1046.8,"d":4.47,"pr":1.3,"pp":0.12,"av":46.43,"iv":38.51,"ch":-0.4,"pe":41.68,"hi":1269.5,"lo":795.8,"cap":671.0,"pv":1.6,"vol":14.0,"oi":619.0,"rank":49,"ratio":1.206},{"s":"TATAELXSI","k":"3600PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":12.096,"p":3771.5,"d":4.55,"pr":3.85,"pp":0.1,"av":38.4,"iv":33.39,"ch":0.7,"pe":34.12,"hi":5950.0,"lo":2996.0,"cap":234.0,"pv":2.0,"vol":126.0,"oi":223.0,"rank":50,"ratio":1.15},{"s":"UJJIVANSFB","k":"57PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":12.105,"p":59.92,"d":4.87,"pr":0.07,"pp":0.12,"av":47.0,"iv":39.22,"ch":-1.2,"pe":10.41,"hi":73.94,"lo":49.24,"cap":117.0,"pv":1.7,"vol":1.0,"oi":117.0,"rank":51,"ratio":1.198},{"s":"DIVISLAB","k":"10600PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":12.396,"p":11118.0,"d":4.66,"pr":9.55,"pp":0.09,"av":32.29,"iv":34.56,"ch":-0.5,"pe":87.22,"hi":11824.0,"lo":5647.5,"cap":2952.0,"pv":0.7,"vol":28.0,"oi":516.0,"rank":52,"ratio":0.934},{"s":"MANKIND","k":"2520PE","x":"23-Nov-2026","er":"NO","sec":"PHARMA","sc":12.57,"p":2630.0,"d":4.18,"pr":2.75,"pp":0.1,"av":34.77,"iv":34.92,"ch":0.0,"pe":47.9,"hi":2705.0,"lo":1909.7,"cap":1086.0,"pv":0.7,"vol":7.0,"oi":138.0,"rank":53,"ratio":0.996},{"s":"COALINDIA","k":"374.75PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":12.86,"p":390.35,"d":4.0,"pr":0.35,"pp":0.09,"av":27.89,"iv":29.07,"ch":-0.2,"pe":7.67,"hi":491.25,"lo":369.6,"cap":2407.0,"pv":1.0,"vol":4.0,"oi":287.0,"rank":54,"ratio":0.959},{"s":"TRENT","k":"3050PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":13.08,"p":3197.4,"d":4.61,"pr":3.9,"pp":0.12,"av":42.99,"iv":36.35,"ch":-0.8,"pe":89.09,"hi":3399.7,"lo":2183.67,"cap":1705.0,"pv":1.0,"vol":15.0,"oi":771.0,"rank":55,"ratio":1.183},{"s":"ADANIGREEN","k":"1360PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":13.106,"p":1428.2,"d":4.78,"pr":2.05,"pp":0.14,"av":52.35,"iv":42.57,"ch":0.6,"pe":102.84,"hi":1631.5,"lo":765.0,"cap":2360.0,"pv":1.8,"vol":41.0,"oi":329.0,"rank":56,"ratio":1.23},{"s":"INDIGO","k":"5200PE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":13.18,"p":5444.0,"d":4.48,"pr":6.15,"pp":0.11,"av":38.4,"iv":35.84,"ch":-0.7,"pe":100.0,"hi":5970.0,"lo":3895.2,"cap":2102.0,"pv":0.8,"vol":27.0,"oi":894.0,"rank":57,"ratio":1.071},{"s":"MPHASIS","k":"2300PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":13.445,"p":2419.1,"d":4.92,"pr":2.45,"pp":0.1,"av":37.06,"iv":36.54,"ch":2.6,"pe":22.88,"hi":2975.0,"lo":2013.0,"cap":462.0,"pv":3.5,"vol":125.0,"oi":299.0,"rank":58,"ratio":1.014},{"s":"ABCAPITAL","k":"395PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":13.54,"p":415.45,"d":4.92,"pr":0.45,"pp":0.11,"av":39.36,"iv":38.79,"ch":-0.2,"pe":23.99,"hi":430.7,"lo":287.7,"cap":1140.0,"pv":1.3,"vol":31.0,"oi":638.0,"rank":59,"ratio":1.015},{"s":"HINDALCO","k":"860PE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":13.68,"p":899.4,"d":4.38,"pr":0.95,"pp":0.11,"av":33.82,"iv":34.81,"ch":-1.2,"pe":10.54,"hi":1176.0,"lo":771.85,"cap":2021.0,"pv":1.0,"vol":148.0,"oi":291.0,"rank":60,"ratio":0.972},{"s":"INDUSINDBK","k":"890PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":14.165,"p":928.2,"d":4.12,"pr":1.25,"pp":0.13,"av":39.17,"iv":37.61,"ch":0.3,"pe":23.67,"hi":1077.85,"lo":750.5,"cap":722.0,"pv":2.7,"vol":67.0,"oi":213.0,"rank":61,"ratio":1.041},{"s":"GODFRYPHLP","k":"1700PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":14.214,"p":1779.5,"d":4.47,"pr":3.2,"pp":0.18,"av":56.55,"iv":44.19,"ch":-0.7,"pe":21.89,"hi":2995.0,"lo":1641.2,"cap":277.0,"pv":1.0,"vol":110.0,"oi":335.0,"rank":62,"ratio":1.28},{"s":"BSE","k":"3550PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":14.384,"p":3719.6,"d":4.56,"pr":5.85,"pp":0.16,"av":49.86,"iv":41.92,"ch":-1.1,"pe":49.86,"hi":4446.8,"lo":2377.4,"cap":1518.0,"pv":1.0,"vol":164.0,"oi":763.0,"rank":63,"ratio":1.189},{"s":"VMM","k":"87PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":14.509,"p":90.75,"d":4.13,"pr":0.12,"pp":0.13,"av":37.64,"iv":35.56,"ch":-1.3,"pe":47.1,"hi":139.5,"lo":84.16,"cap":425.0,"pv":0.9,"vol":9.0,"oi":88.0,"rank":64,"ratio":1.058},{"s":"HAVELLS","k":"1160PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":14.542,"p":1208.7,"d":4.03,"pr":1.4,"pp":0.12,"av":32.1,"iv":32.13,"ch":0.3,"pe":43.04,"hi":1514.7,"lo":999.2,"cap":756.0,"pv":1.7,"vol":15.0,"oi":124.0,"rank":65,"ratio":0.999},{"s":"ATHERENERG","k":"1840PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":14.624,"p":1933.0,"d":4.81,"pr":3.2,"pp":0.17,"av":54.45,"iv":43.12,"ch":0.4,"pe":100.0,"hi":2021.5,"lo":589.0,"cap":767.0,"pv":1.3,"vol":28.0,"oi":620.0,"rank":66,"ratio":1.263},{"s":"NMDC","k":"64PE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":14.691,"p":66.82,"d":4.22,"pr":0.08,"pp":0.12,"av":34.39,"iv":35.94,"ch":-2.0,"pe":8.08,"hi":97.49,"lo":65.15,"cap":587.0,"pv":1.7,"vol":3.0,"oi":57.0,"rank":67,"ratio":0.957},{"s":"SHRIRAMFIN","k":"920PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":14.724,"p":960.85,"d":4.25,"pr":1.45,"pp":0.15,"av":43.56,"iv":37.19,"ch":-1.2,"pe":17.99,"hi":1153.7,"lo":810.1,"cap":2262.0,"pv":1.3,"vol":156.0,"oi":810.0,"rank":68,"ratio":1.171},{"s":"PAGEIND","k":"29500PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":14.989,"p":30780.0,"d":4.16,"pr":38.35,"pp":0.12,"av":34.58,"iv":35.61,"ch":-0.8,"pe":45.0,"hi":43855.0,"lo":29805.0,"cap":344.0,"pv":0.9,"vol":153.0,"oi":143.0,"rank":69,"ratio":0.971},{"s":"RECLTD","k":"285PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":15.134,"p":297.4,"d":4.17,"pr":0.4,"pp":0.13,"av":37.06,"iv":35.58,"ch":-0.6,"pe":5.07,"hi":387.8,"lo":281.9,"cap":782.0,"pv":1.2,"vol":5.0,"oi":504.0,"rank":70,"ratio":1.042},{"s":"SBICARD","k":"550PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":15.97,"p":574.0,"d":4.18,"pr":0.75,"pp":0.13,"av":34.2,"iv":37.43,"ch":0.4,"pe":20.49,"hi":906.4,"lo":519.05,"cap":547.0,"pv":1.8,"vol":94.0,"oi":394.0,"rank":71,"ratio":0.914},{"s":"TATASTEEL","k":"167.5PE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":16.013,"p":174.62,"d":4.08,"pr":0.22,"pp":0.13,"av":32.1,"iv":36.62,"ch":-3.1,"pe":18.97,"hi":224.4,"lo":160.06,"cap":2188.0,"pv":2.5,"vol":43.0,"oi":804.0,"rank":72,"ratio":0.877},{"s":"PGEL","k":"550PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":16.19,"p":575.45,"d":4.42,"pr":1.2,"pp":0.21,"av":56.93,"iv":43.37,"ch":-0.5,"pe":71.35,"hi":644.4,"lo":436.55,"cap":165.0,"pv":1.5,"vol":133.0,"oi":408.0,"rank":73,"ratio":1.313},{"s":"RVNL","k":"185PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":16.384,"p":193.77,"d":4.53,"pr":0.32,"pp":0.17,"av":45.66,"iv":39.39,"ch":-0.5,"pe":42.88,"hi":400.7,"lo":177.86,"cap":405.0,"pv":1.9,"vol":53.0,"oi":406.0,"rank":74,"ratio":1.159},{"s":"POWERINDIA","k":"28500PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":16.448,"p":29825.0,"d":4.44,"pr":61.0,"pp":0.2,"av":55.21,"iv":42.43,"ch":-3.1,"pe":114.12,"hi":38785.0,"lo":16111.0,"cap":1328.0,"pv":1.4,"vol":501.0,"oi":812.0,"rank":75,"ratio":1.301},{"s":"RADICO","k":"4400PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":16.467,"p":4614.0,"d":4.64,"pr":6.35,"pp":0.14,"av":38.78,"iv":39.38,"ch":-0.9,"pe":78.49,"hi":4747.0,"lo":2500.0,"cap":619.0,"pv":1.0,"vol":22.0,"oi":189.0,"rank":76,"ratio":0.985},{"s":"TCS","k":"2280PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":16.783,"p":2387.3,"d":4.49,"pr":3.0,"pp":0.13,"av":33.62,"iv":37.18,"ch":1.7,"pe":16.6,"hi":3350.0,"lo":1976.8,"cap":8622.0,"pv":3.2,"vol":707.0,"oi":541.0,"rank":77,"ratio":0.904},{"s":"MOTILALOFS","k":"1160PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":16.874,"p":1211.35,"d":4.24,"pr":2.45,"pp":0.2,"av":50.82,"iv":42.92,"ch":0.1,"pe":27.42,"hi":1277.8,"lo":614.9,"cap":730.0,"pv":2.0,"vol":18.0,"oi":288.0,"rank":78,"ratio":1.184},{"s":"HEROMOTOCO","k":"5250PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":17.422,"p":5515.0,"d":4.81,"pr":6.45,"pp":0.12,"av":32.29,"iv":39.79,"ch":-0.8,"pe":17.44,"hi":6388.5,"lo":4671.5,"cap":1104.0,"pv":0.9,"vol":9.0,"oi":292.0,"rank":79,"ratio":0.812},{"s":"COFORGE","k":"2000PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":17.505,"p":2094.0,"d":4.49,"pr":3.65,"pp":0.17,"av":44.71,"iv":37.8,"ch":2.5,"pe":43.24,"hi":2127.9,"lo":1008.1,"cap":927.0,"pv":3.2,"vol":326.0,"oi":1152.0,"rank":80,"ratio":1.183},{"s":"BLUESTARCO","k":"1700PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":17.622,"p":1785.9,"d":4.81,"pr":2.75,"pp":0.15,"av":42.03,"iv":43.83,"ch":1.6,"pe":62.43,"hi":2029.6,"lo":1432.3,"cap":369.0,"pv":3.5,"vol":122.0,"oi":521.0,"rank":81,"ratio":0.959},{"s":"ADANIENSOL","k":"1420PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":17.633,"p":1479.9,"d":4.05,"pr":3.25,"pp":0.22,"av":50.44,"iv":39.96,"ch":0.6,"pe":46.76,"hi":1789.0,"lo":803.1,"cap":1812.0,"pv":1.4,"vol":90.0,"oi":152.0,"rank":82,"ratio":1.262},{"s":"AUBANK","k":"920PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":17.888,"p":968.35,"d":4.99,"pr":1.3,"pp":0.13,"av":37.45,"iv":38.71,"ch":-1.5,"pe":23.3,"hi":1144.1,"lo":831.65,"cap":729.0,"pv":1.9,"vol":6.0,"oi":584.0,"rank":83,"ratio":0.967},{"s":"NBCC","k":"75PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":17.983,"p":78.88,"d":4.92,"pr":0.13,"pp":0.16,"av":45.09,"iv":43.78,"ch":-0.7,"pe":25.5,"hi":125.85,"lo":67.02,"cap":213.0,"pv":1.1,"vol":3.0,"oi":98.0,"rank":84,"ratio":1.03},{"s":"COLPAL","k":"1700PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":18.189,"p":1775.0,"d":4.23,"pr":2.45,"pp":0.14,"av":32.1,"iv":34.97,"ch":-0.2,"pe":33.72,"hi":2301.6,"lo":1563.9,"cap":482.0,"pv":0.9,"vol":13.0,"oi":518.0,"rank":85,"ratio":0.918},{"s":"DELHIVERY","k":"435PE","x":"23-Nov-2026","er":"NO","sec":"INFRA_LOGISTICS","sc":18.366,"p":455.85,"d":4.57,"pr":0.7,"pp":0.15,"av":38.21,"iv":39.67,"ch":-0.1,"pe":182.68,"hi":524.0,"lo":364.65,"cap":342.0,"pv":1.0,"vol":6.0,"oi":104.0,"rank":86,"ratio":0.963},{"s":"BHARATFORG","k":"1620PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":18.513,"p":1703.0,"d":4.87,"pr":2.35,"pp":0.14,"av":36.3,"iv":42.95,"ch":-1.5,"pe":118.43,"hi":2295.0,"lo":1323.8,"cap":832.0,"pv":1.5,"vol":1.0,"oi":256.0,"rank":87,"ratio":0.845},{"s":"TMPV","k":"255PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":18.54,"p":266.45,"d":4.3,"pr":0.45,"pp":0.17,"av":39.17,"iv":37.95,"ch":1.0,"pe":0.0,"hi":408.0,"lo":251.5,"cap":980.0,"pv":2.1,"vol":540.0,"oi":1632.0,"rank":88,"ratio":1.032},{"s":"TIINDIA","k":"2100PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":18.634,"p":2207.4,"d":4.87,"pr":3.55,"pp":0.16,"av":42.03,"iv":42.1,"ch":-1.7,"pe":34.81,"hi":3335.2,"lo":2005.2,"cap":428.0,"pv":1.7,"vol":32.0,"oi":609.0,"rank":89,"ratio":0.998},{"s":"ADANIPOWER","k":"200PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":18.827,"p":209.64,"d":4.6,"pr":0.4,"pp":0.19,"av":46.62,"iv":42.65,"ch":-0.2,"pe":21.23,"hi":254.2,"lo":128.1,"cap":4051.0,"pv":0.8,"vol":19.0,"oi":1138.0,"rank":90,"ratio":1.093},{"s":"MARUTI","k":"13100PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":19.301,"p":13686.0,"d":4.28,"pr":18.75,"pp":0.14,"av":30.38,"iv":37.38,"ch":0.9,"pe":29.53,"hi":17370.0,"lo":10985.0,"cap":4312.0,"pv":2.3,"vol":1121.0,"oi":2853.0,"rank":91,"ratio":0.813},{"s":"PATANJALI","k":"385PE","x":"23-Nov-2026","er":"NO","sec":"FMCG","sc":19.99,"p":402.9,"d":4.44,"pr":0.7,"pp":0.17,"av":38.59,"iv":39.51,"ch":0.2,"pe":22.15,"hi":589.95,"lo":328.2,"cap":438.0,"pv":0.9,"vol":2.0,"oi":84.0,"rank":92,"ratio":0.977},{"s":"BANDHANBNK","k":"165PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":20.114,"p":173.23,"d":4.75,"pr":0.37,"pp":0.21,"av":50.44,"iv":41.79,"ch":-0.9,"pe":14.71,"hi":220.76,"lo":134.25,"cap":279.0,"pv":0.9,"vol":10.0,"oi":281.0,"rank":93,"ratio":1.207},{"s":"NAVINFLUOR","k":"9700PE","x":"23-Nov-2026","er":"NO","sec":"CHEMICALS","sc":20.528,"p":10188.0,"d":4.79,"pr":18.6,"pp":0.18,"av":42.6,"iv":43.34,"ch":-0.1,"pe":57.9,"hi":10360.0,"lo":5440.0,"cap":523.0,"pv":1.1,"vol":2.0,"oi":206.0,"rank":94,"ratio":0.983},{"s":"LODHA","k":"1140PE","x":"23-Nov-2026","er":"NO","sec":"REAL_ESTATE","sc":20.862,"p":1191.1,"d":4.29,"pr":2.8,"pp":0.24,"av":48.34,"iv":43.54,"ch":-1.2,"pe":27.49,"hi":1344.95,"lo":650.8,"cap":1188.0,"pv":1.6,"vol":8.0,"oi":313.0,"rank":95,"ratio":1.11},{"s":"MAZDOCK","k":"1760PE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":21.008,"p":1836.7,"d":4.18,"pr":4.25,"pp":0.23,"av":46.04,"iv":41.7,"ch":-1.0,"pe":30.0,"hi":2848.0,"lo":1687.5,"cap":739.0,"pv":1.0,"vol":1.0,"oi":372.0,"rank":96,"ratio":1.104},{"s":"SIEMENS","k":"3400PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":21.01,"p":3564.8,"d":4.62,"pr":6.35,"pp":0.18,"av":39.17,"iv":40.72,"ch":-1.3,"pe":35.78,"hi":4149.4,"lo":2826.0,"cap":1269.0,"pv":2.1,"vol":58.0,"oi":363.0,"rank":97,"ratio":0.962},{"s":"SYRMA","k":"1440PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":21.56,"p":1503.5,"d":4.22,"pr":4.3,"pp":0.29,"av":55.98,"iv":44.51,"ch":-0.8,"pe":61.91,"hi":1822.6,"lo":634.5,"cap":290.0,"pv":1.0,"vol":48.0,"oi":112.0,"rank":98,"ratio":1.258},{"s":"MOTHERSON","k":"155PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":21.775,"p":162.87,"d":4.83,"pr":0.31,"pp":0.19,"av":42.22,"iv":44.41,"ch":-1.7,"pe":33.68,"hi":173.27,"lo":102.82,"cap":1716.0,"pv":0.9,"vol":13.0,"oi":450.0,"rank":99,"ratio":0.951},{"s":"AMBER","k":"6400PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":22.235,"p":6702.5,"d":4.51,"pr":17.55,"pp":0.26,"av":53.11,"iv":47.58,"ch":0.1,"pe":246.15,"hi":8974.0,"lo":5400.5,"cap":237.0,"pv":1.9,"vol":333.0,"oi":1093.0,"rank":100,"ratio":1.116},{"s":"SUZLON","k":"35PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":22.412,"p":36.49,"d":4.08,"pr":0.09,"pp":0.25,"av":44.9,"iv":42.48,"ch":-1.0,"pe":21.99,"hi":60.45,"lo":33.15,"cap":503.0,"pv":0.7,"vol":82.0,"oi":1147.0,"rank":101,"ratio":1.057},{"s":"YESBANK","k":"17PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":22.477,"p":17.75,"d":4.23,"pr":0.04,"pp":0.23,"av":42.41,"iv":41.23,"ch":-0.5,"pe":13.23,"hi":25.78,"lo":15.1,"cap":557.0,"pv":1.0,"vol":142.0,"oi":1485.0,"rank":102,"ratio":1.029},{"s":"INFY","k":"1054PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":22.512,"p":1103.8,"d":4.51,"pr":2.0,"pp":0.18,"av":36.3,"iv":40.41,"ch":1.0,"pe":14.62,"hi":1728.0,"lo":980.4,"cap":4478.0,"pv":2.0,"vol":720.0,"oi":682.0,"rank":103,"ratio":0.898},{"s":"TITAN","k":"4350PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":22.571,"p":4571.2,"d":4.84,"pr":6.15,"pp":0.13,"av":28.85,"iv":39.3,"ch":-2.8,"pe":58.68,"hi":5186.7,"lo":3751.0,"cap":4056.0,"pv":1.4,"vol":406.0,"oi":451.0,"rank":104,"ratio":0.734},{"s":"BDL","k":"980PE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":22.668,"p":1026.0,"d":4.48,"pr":2.4,"pp":0.23,"av":46.23,"iv":47.38,"ch":-0.4,"pe":76.06,"hi":1593.9,"lo":974.0,"cap":377.0,"pv":0.8,"vol":149.0,"oi":2334.0,"rank":105,"ratio":0.976},{"s":"IEX","k":"110PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":23.026,"p":114.83,"d":4.21,"pr":0.27,"pp":0.24,"av":42.99,"iv":42.06,"ch":-0.4,"pe":19.61,"hi":160.27,"lo":99.5,"cap":102.0,"pv":1.1,"vol":9.0,"oi":567.0,"rank":106,"ratio":1.022},{"s":"DATAPATTNS","k":"3900PE","x":"23-Nov-2026","er":"NO","sec":"DEFENCE","sc":23.392,"p":4076.0,"d":4.32,"pr":13.45,"pp":0.33,"av":60.94,"iv":46.6,"ch":-1.0,"pe":95.67,"hi":5000.0,"lo":2131.0,"cap":228.0,"pv":1.4,"vol":45.0,"oi":325.0,"rank":107,"ratio":1.308},{"s":"TVSMOTOR","k":"4350PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":24.073,"p":4577.2,"d":4.96,"pr":7.3,"pp":0.16,"av":32.86,"iv":41.69,"ch":-0.6,"pe":52.05,"hi":4636.1,"lo":3228.0,"cap":2174.0,"pv":1.1,"vol":65.0,"oi":232.0,"rank":108,"ratio":0.788},{"s":"ASHOKLEY","k":"157.5PE","x":"23-Nov-2026","er":"NO","sec":"AUTO","sc":25.016,"p":165.0,"d":4.55,"pr":0.39,"pp":0.24,"av":42.99,"iv":45.1,"ch":-0.1,"pe":25.09,"hi":215.42,"lo":138.03,"cap":969.0,"pv":1.2,"vol":161.0,"oi":1285.0,"rank":109,"ratio":0.953},{"s":"POLYCAB","k":"7100PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":25.132,"p":7401.5,"d":4.07,"pr":17.55,"pp":0.24,"av":38.4,"iv":40.88,"ch":-1.9,"pe":34.39,"hi":10126.0,"lo":6663.0,"cap":1116.0,"pv":1.9,"vol":294.0,"oi":315.0,"rank":110,"ratio":0.939},{"s":"TECHM","k":"1680PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":25.43,"p":1756.3,"d":4.34,"pr":3.5,"pp":0.2,"av":34.01,"iv":40.86,"ch":1.8,"pe":30.79,"hi":1860.0,"lo":1304.1,"cap":1719.0,"pv":2.8,"vol":68.0,"oi":291.0,"rank":111,"ratio":0.832},{"s":"IRFC","k":"80PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":26.176,"p":84.12,"d":4.9,"pr":0.17,"pp":0.2,"av":37.83,"iv":45.11,"ch":-0.6,"pe":14.38,"hi":137.17,"lo":73.05,"cap":1094.0,"pv":2.0,"vol":85.0,"oi":946.0,"rank":112,"ratio":0.839},{"s":"LTM","k":"4000PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":26.817,"p":4200.9,"d":4.78,"pr":9.05,"pp":0.22,"av":38.4,"iv":41.54,"ch":2.7,"pe":23.27,"hi":6429.5,"lo":3528.0,"cap":1242.0,"pv":3.3,"vol":207.0,"oi":332.0,"rank":113,"ratio":0.924},{"s":"ANGELONE","k":"325PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":29.784,"p":338.7,"d":4.04,"pr":1.25,"pp":0.37,"av":50.06,"iv":48.06,"ch":0.6,"pe":26.8,"hi":379.15,"lo":208.63,"cap":310.0,"pv":2.4,"vol":87.0,"oi":283.0,"rank":114,"ratio":1.042},{"s":"POLICYBZR","k":"960PE","x":"23-Nov-2026","er":"NO","sec":"FINTECH","sc":30.239,"p":1006.2,"d":4.59,"pr":4.8,"pp":0.48,"av":72.41,"iv":58.6,"ch":-1.0,"pe":59.75,"hi":1964.2,"lo":916.0,"cap":468.0,"pv":1.6,"vol":535.0,"oi":1282.0,"rank":115,"ratio":1.236},{"s":"KEI","k":"3600PE","x":"23-Nov-2026","er":"NO","sec":"ELECTRICALS","sc":30.316,"p":3755.0,"d":4.13,"pr":12.85,"pp":0.34,"av":46.62,"iv":44.5,"ch":-2.1,"pe":33.75,"hi":5899.0,"lo":3653.1,"cap":358.0,"pv":2.9,"vol":76.0,"oi":226.0,"rank":116,"ratio":1.048},{"s":"WIPRO","k":"177.5PE","x":"23-Nov-2026","er":"NO","sec":"IT","sc":31.092,"p":186.39,"d":4.77,"pr":0.39,"pp":0.21,"av":32.1,"iv":43.44,"ch":1.3,"pe":13.87,"hi":273.1,"lo":156.79,"cap":1846.0,"pv":3.0,"vol":44.0,"oi":402.0,"rank":117,"ratio":0.739},{"s":"GVT&D","k":"4000PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":31.714,"p":4176.4,"d":4.22,"pr":16.55,"pp":0.4,"av":52.73,"iv":56.38,"ch":-4.0,"pe":76.98,"hi":5650.0,"lo":2523.2,"cap":1069.0,"pv":2.7,"vol":368.0,"oi":823.0,"rank":118,"ratio":0.935},{"s":"PNB","k":"147PE","x":"23-Nov-2026","er":"NO","sec":"BANKING","sc":34.082,"p":153.78,"d":4.41,"pr":0.42,"pp":0.27,"av":35.34,"iv":44.45,"ch":-0.7,"pe":7.52,"hi":156.49,"lo":98.5,"cap":1768.0,"pv":1.1,"vol":39.0,"oi":167.0,"rank":119,"ratio":0.795},{"s":"KALYANKJIL","k":"610PE","x":"23-Nov-2026","er":"NO","sec":"CONSUMER","sc":35.226,"p":637.15,"d":4.26,"pr":3.05,"pp":0.48,"av":57.89,"iv":55.32,"ch":-3.5,"pe":41.91,"hi":729.35,"lo":327.05,"cap":659.0,"pv":2.1,"vol":318.0,"oi":338.0,"rank":120,"ratio":1.046},{"s":"MAXHEALTH","k":"1030PE","x":"23-Nov-2026","er":"NO","sec":"HEALTHCARE","sc":37.708,"p":1078.25,"d":4.47,"pr":3.25,"pp":0.3,"av":35.73,"iv":47.63,"ch":3.5,"pe":72.11,"hi":1185.4,"lo":797.0,"cap":1048.0,"pv":2.6,"vol":155.0,"oi":407.0,"rank":121,"ratio":0.75},{"s":"INOXWIND","k":"54PE","x":"23-Nov-2026","er":"NO","sec":"ENERGY","sc":37.969,"p":56.42,"d":4.29,"pr":0.27,"pp":0.48,"av":54.07,"iv":51.58,"ch":-1.2,"pe":27.23,"hi":142.37,"lo":55.1,"cap":97.0,"pv":2.5,"vol":34.0,"oi":34.0,"rank":122,"ratio":1.048},{"s":"HINDZINC","k":"490PE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":40.34,"p":511.2,"d":4.15,"pr":2.25,"pp":0.44,"av":45.28,"iv":56.05,"ch":-3.3,"pe":10.69,"hi":733.0,"lo":453.5,"cap":2162.0,"pv":2.0,"vol":451.0,"oi":619.0,"rank":123,"ratio":0.808},{"s":"CGPOWER","k":"760PE","x":"23-Nov-2026","er":"NO","sec":"CAPITAL_GOODS","sc":41.343,"p":793.25,"d":4.19,"pr":3.35,"pp":0.42,"av":42.8,"iv":52.74,"ch":-2.4,"pe":91.32,"hi":980.9,"lo":525.5,"cap":1250.0,"pv":1.5,"vol":136.0,"oi":341.0,"rank":124,"ratio":0.812},{"s":"APLAPOLLO","k":"2000PE","x":"23-Nov-2026","er":"NO","sec":"STEEL","sc":46.16,"p":2092.0,"d":4.4,"pr":7.8,"pp":0.37,"av":35.54,"iv":47.57,"ch":-2.8,"pe":45.81,"hi":2312.3,"lo":1690.0,"cap":580.0,"pv":2.7,"vol":791.0,"oi":368.0,"rank":125,"ratio":0.747},{"s":"IREDA","k":"126PE","x":"23-Nov-2026","er":"NO","sec":"FINANCIAL_SERVICES","sc":56.961,"p":132.08,"d":4.6,"pr":0.7,"pp":0.53,"av":42.8,"iv":58.94,"ch":1.6,"pe":17.1,"hi":149.48,"lo":98.78,"cap":370.0,"pv":3.4,"vol":88.0,"oi":282.0,"rank":126,"ratio":0.726}],"meta":{"generated":"20 Nov 2026, 09:25","runRepo":"hackerman3102/stock-page","runTokenHelp":"https://github.com/settings/personal-access-tokens/new","expiry":"23-Nov-2026"},"base":"../../","current":"20261120-092524","choices":["AUTO","BANKING","CAPITAL_GOODS","CEMENT_BUILDING","CHEMICALS","CONSUMER","DEFENCE","ELECTRICALS","ENERGY","FINANCIAL_SERVICES","FINTECH","FMCG","HEALTHCARE","INFRA_LOGISTICS","INTERNET","IT","PHARMA","REAL_ESTATE","STEEL","TELECOM","LARGE_CAP","PRIVATE_BANKS","PUBLIC_BANKS"]};
+const LABELS = 10, PAGE = 15;
+let side = "calls", selIdx = 0, zoom = false, shown = PAGE, secSel = "";
+const $ = id => document.getElementById(id);
+let qSel = "";                                              // stock search text (upper-case)
+const qMatch = p => !qSel || p.s.toUpperCase().includes(qSel);
+let erSel = "all", sortKey = "sc", sortDir = 1;          // erSel: all | yes | no ; sortDir: 1 = low to high, -1 = high to low
+const METRICS = {          // key: [menu label, short label, formatter, default direction (1 = low first)]
+  sc:    ["Best score (default)", "score", p => f(p.sc, 1), 1],
+  av:    ["Annual volatility", "annual vol", p => f(p.av, 1) + "%", -1],
+  iv:    ["Implied volatility", "implied vol", p => f(p.iv, 1) + "%", -1],
+  ratio: ["Vol ratio (annual ÷ implied)", "vol ratio", p => f(p.ratio, 2) + "×", -1],
+  ch:    ["Today's % move", "day move", p => (p.ch >= 0 ? "+" : "") + f(p.ch, 1) + "%", -1],
+  pp:    ["Premium %", "premium", p => f(p.pp, 2) + "%", 1],
+  d:     ["Distance to strike %", "away", p => f(p.d, 1) + "%", 1],
+  vol:   ["Option volume", "volume", p => Number(p.vol).toLocaleString("en-IN"), -1],
+  oi:    ["Open interest", "open int.", p => Number(p.oi).toLocaleString("en-IN"), -1],
+  cap:   ["Market cap", "mkt cap", p => f(p.cap, 0) + " Billion ", -1]
+};
+const erMatch = p => erSel === "all" || (erSel === "yes" ? p.er !== "NO" : p.er === "NO");
+let _pk = "", _pv = [];
+const pts = () => {       // current side, filtered by sector + results date, then sorted (memoised)
+  const k = [side, secSel, erSel, sortKey, sortDir, qSel].join("|");
+  if (k !== _pk){
+    _pk = k;
+    _pv = DATA[side].filter(p => (!secSel || p.sec === secSel) && erMatch(p) && qMatch(p));
+    _pv = _pv.slice().sort((a, b) => (a[sortKey] - b[sortKey]) * sortDir || a.sc - b.sc);
+  }
+  return _pv;
+};
+const nice = s => s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()).replace(/^It$/, "IT").replace(/^Fmcg$/, "FMCG");
+function secs(){
+  const base = DATA[side].filter(p => erMatch(p) && qMatch(p));
+  const cnt = {}; base.forEach(p => cnt[p.sec] = (cnt[p.sec] || 0) + 1);
+  const names = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a] || a.localeCompare(b));
+  if (secSel && !cnt[secSel]) secSel = "";
+  const box = $("secs");
+  box.style.display = (names.length > 1 || secSel) ? "flex" : "none";
+  box.innerHTML = ['<button data-s="" aria-pressed="' + (secSel === "") + '">All<small>' + base.length + "</small></button>"]
+    .concat(names.map(n => '<button data-s="' + n + '" aria-pressed="' + (secSel === n) + '">' + nice(n) + "<small>" + cnt[n] + "</small></button>")).join("");
+  box.querySelectorAll("button").forEach(b => b.onclick = () => {
+    secSel = b.dataset.s; refresh();
+  });
+  // results-date filter (counts follow the sector chip)
+  const inSec = DATA[side].filter(p => (!secSel || p.sec === secSel) && qMatch(p));
+  const nYes = inSec.filter(p => p.er !== "NO").length;
+  $("erRow").innerHTML = [["all", "Any results date", inSec.length], ["yes", "&#9733; Results due", nYes], ["no", "No results due", inSec.length - nYes]]
+    .map(([k, t, n]) => '<button data-e="' + k + '" aria-pressed="' + (erSel === k) + '">' + t + "<small>" + n + "</small></button>").join("");
+  $("erRow").querySelectorAll("button").forEach(b => b.onclick = () => { erSel = b.dataset.e; refresh(); });
+}
+function sortUI(){
+  const sel = $("sortBy");
+  if (!sel.options.length) sel.innerHTML = Object.keys(METRICS).map(k => '<option value="' + k + '">' + METRICS[k][0] + "</option>").join("");
+  sel.value = sortKey;
+  $("sortDir").textContent = sortDir === 1 ? "Low → High" : "High → Low";
+}
+function refresh(){            // any filter / sort change
+  selIdx = 0; shown = PAGE; secs(); sortUI(); draw(); detail(); list();
+}
+const f = (n, d = 2) => (n === null || n === undefined || isNaN(n)) ? "–" : Number(n).toFixed(d);
+const money = n => "₹" + Number(n).toLocaleString("en-IN", {maximumFractionDigits: 2});
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function zone(p){ return p.p * 1.05 > p.hi ? "high" : (p.p * 0.95 <= p.lo ? "low" : "mid"); }
+function peQ(pe){ return (pe < 0 || pe > 30) ? "poor" : ((pe > 0 && pe < 15) ? "good" : "neutral"); }
+const FILL = {high: "#2b7de9", low: "#f08a24", mid: "#8f98a4"};
+
+function header(){
+  const m = DATA.meta;
+  $("sub").textContent = [m.expiry ? "Expiry " + m.expiry : "", DATA.calls.length + " calls · " + DATA.puts.length + " puts"]
+    .filter(Boolean).join(" · ");
+  $("gen").textContent = m.generated;
+
+  $("bCalls").textContent = "Calls (" + DATA.calls.length + ")";
+  $("bPuts").textContent = "Puts (" + DATA.puts.length + ")";
+}
+
+const M = {l: 42, r: 10, t: 14, b: 42};
+function rng(vals){
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (lo === hi){ lo -= 1; hi += 1; }
+  const pad = (hi - lo) * 0.07; return [lo - pad, hi + pad];
+}
+function labelPlan(P, sizes, xr, yr, W, H){
+  // Collision-aware ticker labels: best pick per stock; try above/below/right/left; skip if it would overlap.
+  const pw = W - M.l - M.r, ph = H - M.t - M.b;
+  const px = P.map(p => [M.l + (p.sc - xr[0]) / (xr[1] - xr[0]) * pw, M.t + (yr[1] - p.ratio) / (yr[1] - yr[0]) * ph]);
+  const text = P.map(() => ""), pos = P.map(() => "top center"), placed = [], seen = new Set();
+  const cands = [["top center", 0, -1], ["bottom center", 0, 1], ["middle right", 1, 0], ["middle left", -1, 0]];
+  let count = 0;
+  for (let i = 0; i < P.length && count < LABELS; i++){
+    const p = P[i]; if (seen.has(p.s)) continue;
+    const w = p.s.length * 6.4 + 6, h = 14, r = sizes[i] / 2 + 3;
+    for (const [name, dx, dy] of cands){
+      const cx = px[i][0] + dx * (r + w / 2), cy = px[i][1] + dy * (r + h / 2);
+      const b = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2];
+      if (b[0] < 0 || b[2] > W || b[1] < 0 || b[3] > H) continue;
+      if (placed.some(o => !(b[2] < o[0] || b[0] > o[2] || b[3] < o[1] || b[1] > o[3]))) continue;
+      placed.push(b); text[i] = p.s; pos[i] = name; seen.add(p.s); count++; break;
+    }
+  }
+  return {text, pos};
+}
+
+let showingMessage = false, curX = null, curY = null, lastW = 0;
+function chartMessage(html){
+  if (window.Plotly && $("chart").data) Plotly.purge("chart");
+  $("chart").innerHTML = '<div class="empty">' + html + "</div>";
+  showingMessage = true;
+}
+function draw(){
+  const P = pts();
+  if (!window.Plotly){ chartMessage("The chart could not load (it needs an internet connection). The list below still works."); return; }
+  if (!P.length){
+    const other = DATA[side === "calls" ? "puts" : "calls"].filter(p => qMatch(p)).length;
+    chartMessage("Nothing matches the current filters (" + side + ")." + (qSel && other ? " " + other + " " + (side === "calls" ? "put" : "call") + (other > 1 ? "s" : "") + " match &ldquo;" + qSel.toLowerCase() + "&rdquo; - switch tab." : ""));
+    return;
+  }
+  if (showingMessage){ $("chart").innerHTML = ""; showingMessage = false; }   // only ever clear when a message is showing
+  const fg = css("--fg"), muted = css("--muted"), line = css("--line");
+  const avs = P.map(p => p.av), lo = Math.min(...avs), hi = Math.max(...avs);
+  const size = p => hi === lo ? 26 : 10 + 40 * (p.av - lo) / (hi - lo);       // 10px (calmest on screen) to 50px (most volatile on screen)
+  const sizes = P.map(size);
+  $("sizeNote").textContent = "Bubble size = annual volatility: smallest " + f(lo, 0) + "%, biggest " + f(hi, 0) + "% (relative to what is on screen).";
+  const xr = rng(P.map(p => p.sc)), yr = rng(P.map(p => p.ratio).concat([1]));
+  curX = xr; curY = yr;
+  const el0 = $("chart");
+  lastW = el0.clientWidth;
+  const plan = labelPlan(P, sizes, xr, yr, el0.clientWidth || 340, el0.clientHeight || 400);
+  const main = {
+    type: "scatter", mode: "markers+text", x: P.map(p => p.sc), y: P.map(p => p.ratio),
+    text: plan.text, textposition: plan.pos,
+    textfont: {size: 10, color: fg}, cliponaxis: false,
+    marker: {size: sizes, color: P.map(p => FILL[zone(p)]),
+             symbol: P.map(p => p.er !== "NO" ? "star" : "circle"),
+             line: {color: P.map(p => p.ch >= 0 ? "#16a34a" : "#dc2626"), width: 2}, opacity: 0.8},
+    hoverinfo: "none"
+  };
+  const s = P[selIdx] || P[0];
+  const ring = {type: "scatter", mode: "markers", x: [s.sc], y: [s.ratio], hoverinfo: "skip",
+    marker: {size: sizes[selIdx] + 12, color: "rgba(0,0,0,0)", line: {color: fg, width: 2.5}}};
+  const layout = {
+    margin: {l: M.l, r: M.r, t: M.t, b: M.b}, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+    showlegend: false, hovermode: "closest", clickmode: "event", hoverdistance: 30,
+    dragmode: zoom ? "pan" : false, font: {color: muted, size: 11},
+    xaxis: {range: xr, title: {text: "Strike score  (lower = better)", standoff: 6}, gridcolor: line, zerolinecolor: line, fixedrange: !zoom},
+    yaxis: {range: yr, title: {text: "Annual vol ÷ implied vol", standoff: 4}, gridcolor: line, zerolinecolor: line, fixedrange: !zoom},
+    shapes: [{type: "line", xref: "paper", x0: 0, x1: 1, y0: 1, y1: 1, line: {color: muted, width: 1, dash: "dash"}}]
+  };
+  const cfg = {displayModeBar: false, responsive: true, scrollZoom: true, doubleClick: "reset"};
+  Plotly.react("chart", [main, ring], layout, cfg).then(() => {
+    const el = $("chart");
+    if (el.removeAllListeners) el.removeAllListeners("plotly_click");
+    el.on("plotly_click", ev => {
+      const pt = ev.points.find(q => q.curveNumber === 0);
+      if (pt) select(pt.pointIndex, false);
+    });
+  }).catch(e => chartMessage("The chart could not be drawn (" + (e && e.message ? e.message : e) + "). The list below still works."));
+}
+
+function moveRing(){
+  // Only moves the highlight ring - keeps the current zoom/pan (no full redraw).
+  const P = pts(), el = $("chart");
+  if (!P.length || !window.Plotly || !el.data || showingMessage) return;
+  const s = P[selIdx] || P[0];
+  const avs = P.map(p => p.av), lo = Math.min(...avs), hi = Math.max(...avs);
+  const sz = hi === lo ? 26 : 10 + 40 * (s.av - lo) / (hi - lo);
+  Plotly.restyle(el, {x: [[s.sc]], y: [[s.ratio]], "marker.size": [sz + 12]}, [1]);
+}
+function setPan(on){
+  zoom = on; $("bZoom").setAttribute("aria-pressed", on); $("bZoom").textContent = "Pan: " + (on ? "on" : "off");
+  const el = $("chart");
+  if (window.Plotly && el.data && !showingMessage) Plotly.relayout(el, {dragmode: on ? "pan" : false, "xaxis.fixedrange": !on, "yaxis.fixedrange": !on});
+}
+function zoomBy(f){
+  const el = $("chart"); if (!window.Plotly || !el._fullLayout || showingMessage) return;
+  const xa = el._fullLayout.xaxis.range, ya = el._fullLayout.yaxis.range, P = pts(), s = P[selIdx] || P[0];
+  const cx = f < 1 ? s.sc : (xa[0] + xa[1]) / 2, cy = f < 1 ? s.ratio : (ya[0] + ya[1]) / 2;   // zoom in towards the selected pick
+  const hx = (xa[1] - xa[0]) / 2 * f, hy = (ya[1] - ya[0]) / 2 * f;
+  Plotly.relayout(el, {"xaxis.range": [cx - hx, cx + hx], "yaxis.range": [cy - hy, cy + hy]});
+}
+function resetView(){
+  const el = $("chart"); if (!window.Plotly || !el.data || showingMessage || !curX) return;
+  Plotly.relayout(el, {"xaxis.range": curX.slice(), "yaxis.range": curY.slice()});
+}
+
+function tile(l, v, cls){ return '<div class="tile"><div class="l">' + l + '</div><div class="v ' + (cls || "") + '">' + v + "</div></div>"; }
+
+function detail(){
+  const P = pts(), box = $("detail");
+  if (!P.length){ box.innerHTML = '<div class="empty">Nothing to show.</div>'; return; }
+  const p = P[selIdx] || P[0];
+  const q = peQ(p.pe), cheap = p.ratio >= 1;
+  box.innerHTML =
+    '<p class="sel-title">' + p.s + " " + p.k + "</p>" +
+    '<p class="sel-sub">Stock ' + money(p.p) + " · expiry " + p.x + (p.er !== "NO" ? " · results " + p.er : "") + "</p>" +
+    '<div class="grid">' +
+      tile("Strike score", f(p.sc, 2) + "  (rank " + p.rank + ")") +
+      tile("Option volume · OI", Number(p.vol).toLocaleString("en-IN") + " · " + Number(p.oi).toLocaleString("en-IN")) +
+      tile("Premium (last)", money(p.pr) + " · " + f(p.pp, 2) + "%") +
+      tile("Distance to strike", f(p.d, 2) + "%") +
+      tile("Vol: annual ÷ implied", f(p.ratio, 2) + (cheap ? " cheap" : " rich"), cheap ? "good" : "warn") +
+      tile("Annual vol", f(p.av, 1) + "%") +
+      tile("Implied vol", f(p.iv, 1) + "%") +
+      tile("Today", (p.ch >= 0 ? "+" : "") + f(p.ch, 1) + "%", p.ch >= 0 ? "good" : "bad") +
+      tile("P/E", f(p.pe, 1), q === "good" ? "good" : (q === "poor" ? "bad" : "")) +
+      tile("52w high / low", f(p.hi, 0) + " / " + f(p.lo, 0)) +
+      tile("Market cap", f(p.cap, 0) + " Billion") +
+    "</div>";
+}
+
+function list(){
+  const P = pts(), box = $("list");
+  $("listTitle").textContent = (side === "calls" ? "Top calls" : "Top puts") + (secSel ? " · " + nice(secSel) : "") + (erSel === "yes" ? " · results due" : (erSel === "no" ? " · no results due" : "")) +
+    " (" + (sortKey === "sc" && sortDir === 1 ? "best first" : "by " + METRICS[sortKey][1]) + ")";
+  if (!P.length){ box.innerHTML = '<div class="empty">No ' + side + " passed the filters in this run.</div>"; $("more").style.display = "none"; return; }
+  box.innerHTML = P.slice(0, shown).map((p, i) =>
+    '<button class="pick" data-i="' + i + '"' + (i === selIdx ? ' aria-current="true"' : "") + ">" +
+      '<div class="top"><span class="badge">' + (i + 1) + '</span><span class="name">' + p.s + " " + p.k +
+      (p.er !== "NO" ? " ★" : "") + '</span><span class="score">' + METRICS[sortKey][2](p) + "<small>" + METRICS[sortKey][1] + "</small></span></div>" +
+      '<div class="chips"><span class="chip">' + money(p.pr) + " · " + f(p.pp, 1) + '%</span>' +
+      '<span class="chip">' + f(p.d, 1) + '% away</span>' +
+      '<span class="chip ' + (p.ratio >= 1 ? "good" : "warn") + '">vol ' + f(p.ratio, 2) + "×</span>" +
+      '<span class="chip ' + (p.ch >= 0 ? "good" : "bad") + '">' + (p.ch >= 0 ? "+" : "") + f(p.ch, 1) + "% today</span></div>" +
+    "</button>").join("");
+  $("more").style.display = shown < P.length ? "block" : "none";
+  $("more").textContent = "Show more (" + (P.length - shown) + " left)";
+  box.querySelectorAll(".pick").forEach(b => b.onclick = () => { select(+b.dataset.i, true); });
+}
+
+function select(i, scroll){
+  selIdx = i; moveRing(); detail(); list();
+  if (scroll) $("chart").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+function runs(){
+  // The list of the last runs comes from runs.json, so archived pages never show stale/broken links.
+  const box = $("runs");
+  fetch((DATA.base || "") + "runs.json", {cache: "no-store"})
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(list => {
+      if (!list || !list.length) return;
+      let h = '<div style="font-weight:700;margin-bottom:4px">Last 30 days &middot; ' + list.length + ' runs</div><div class="runs-list">';
+      h += list.map((r, i) => {
+        const href = i === 0 ? ((DATA.base || "") || "./") : (DATA.base || "") + "runs/" + r.stamp + "/";
+        const tags = (i === 0 ? " · latest" : "") + (r.stamp === DATA.current ? " · viewing" : "");
+        return '<a href="' + href + '"><span>' + r.label + tags + "</span><span>" + r.calls + " calls · " + r.puts + " puts</span></a>";
+      }).join("") + "</div>";
+      box.innerHTML = h; box.style.display = "block";
+    }).catch(() => {});
+}
+
+// ---------- Run a new screen (creates a request the laptop watcher picks up) ----------
+const TOKEN_KEY = "optionsRunToken";
+const store = {
+  get(){ try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } },
+  set(v){ try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+};
+let pollTimer = null;
+function runPanel(){
+  const m = DATA.meta;
+  if (!m.runRepo || DATA.base !== "") return;
+  $("runPanel").style.display = "block";
+  const opts = '<option value="">All stocks (default from const.py)</option>' +
+    (DATA.choices || []).map(c => '<option value="' + c + '">' + nice(c) + "</option>").join("") + '<option value="__custom">Type symbols…</option>';
+  if (!store.get()){
+    $("runBody").innerHTML =
+      '<p class="small">One-time setup: paste a GitHub token that can only create issues in <b>' + m.runRepo + '</b>. ' +
+      'It is saved only in this browser. <a href="' + m.runTokenHelp + '" target="_blank" rel="noopener">Create the token</a> ' +
+      '(repository access: only <i>' + m.runRepo.split("/")[1] + '</i>; permission <i>Issues: Read and write</i>).</p>' +
+      '<label for="rTok">Token</label><input id="rTok" type="password" autocomplete="off" placeholder="github_pat_…">' +
+      '<button class="go" id="rSave">Save token</button>';
+    $("rSave").onclick = () => { const v = $("rTok").value.trim(); if (v){ store.set(v); runPanel(); } };
+    return;
+  }
+  $("runBody").innerHTML =
+    '<label for="rStocks">Stocks</label><select id="rStocks">' + opts + '</select>' +
+    '<input id="rCustom" style="display:none;margin-top:8px" placeholder="e.g. ITC, INFY">' +
+    '<label for="rExp">Expiry dates (blank = default)</label><input id="rExp" placeholder="24-Nov-2026">' +
+    '<div class="two"><div><label for="rMin">Min strike distance %</label><input id="rMin" inputmode="decimal" placeholder="default"></div>' +
+    '<div><label for="rMax">Max strike distance %</label><input id="rMax" inputmode="decimal" placeholder="default"></div></div>' +
+    '<div class="two"><div><label for="rItems">Picks per stock</label><input id="rItems" inputmode="numeric" placeholder="default"></div>' +
+    '<div><label for="rMom">Momentum mode</label><select id="rMom"><option>Default</option><option>Off</option><option>On</option></select></div></div>' +
+    '<div class="two"><div><label for="rMc">Momentum call threshold</label><input id="rMc" inputmode="decimal" placeholder="default"></div>' +
+    '<div><label for="rMp">Momentum put threshold</label><input id="rMp" inputmode="decimal" placeholder="default"></div></div>' +
+    '<button class="go" id="rGo">Run on my laptop</button>' +
+    '<div class="status" id="rStatus" style="display:none"></div>' +
+    '<p class="small">Blank fields use your const.py defaults. The laptop must be on with the watcher running.</p>' +
+    '<button class="lnk" id="rForget">Remove saved token</button>';
+  $("rStocks").onchange = () => { $("rCustom").style.display = $("rStocks").value === "__custom" ? "block" : "none"; };
+  $("rForget").onclick = () => { store.set(""); runPanel(); };
+  $("rGo").onclick = submitRun;
+}
+function say(t){ const b = $("rStatus"); b.style.display = "block"; b.textContent = t; }
+function submitRun(){
+  const v = id => $(id).value.trim();
+  const stocks = v("rStocks") === "__custom" ? v("rCustom") : v("rStocks");
+  const F = [["Stocks", stocks], ["Expiry dates", v("rExp")], ["Min strike distance %", v("rMin")], ["Max strike distance %", v("rMax")],
+             ["Picks per stock", v("rItems")], ["Momentum mode", v("rMom")], ["Momentum call threshold", v("rMc")], ["Momentum put threshold", v("rMp")]];
+  const body = F.map(([k, x]) => "### " + k + "\n\n" + (x || "_No response_")).join("\n\n");
+  const title = "[run] " + (stocks ? stocks : "all stocks") + " " + new Date().toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit"});
+  $("rGo").disabled = true; say("Sending request…");
+  fetch("https://api.github.com/repos/" + DATA.meta.runRepo + "/issues", {
+    method: "POST",
+    headers: {"Accept": "application/vnd.github+json", "Authorization": "Bearer " + store.get(), "Content-Type": "application/json"},
+    body: JSON.stringify({title: title, body: body})
+  }).then(r => r.json().then(j => ({ok: r.ok, status: r.status, j: j}))).then(res => {
+    if (!res.ok){
+      $("rGo").disabled = false;
+      say(res.status === 401 || res.status === 403 || res.status === 404
+        ? "GitHub refused the token (" + res.status + "). Remove it below and create a new one with Issues: Read and write on " + DATA.meta.runRepo + "."
+        : "Could not send the request (" + res.status + "): " + (res.j && res.j.message || ""));
+      return;
+    }
+    say("Request #" + res.j.number + " sent. Waiting for the laptop to pick it up…");
+    watchIssue(res.j.number, 0);
+  }).catch(e => { $("rGo").disabled = false; say("Could not reach GitHub: " + e.message); });
+}
+function watchIssue(n, ticks){
+  clearTimeout(pollTimer);
+  if (ticks > 540){ $("rGo").disabled = false; say("Stopped watching request #" + n + " (3 hours). Check the laptop."); return; }
+  const h = {"Accept": "application/vnd.github+json", "Authorization": "Bearer " + store.get()};
+  const base = "https://api.github.com/repos/" + DATA.meta.runRepo + "/issues/" + n;
+  fetch(base, {headers: h}).then(r => r.json()).then(iss =>
+    fetch(base + "/comments", {headers: h}).then(r => r.json()).then(cs => {
+      const last = cs.length ? cs[cs.length - 1].body : "";
+      if (iss.state === "closed"){
+        $("rGo").disabled = false;
+        say("Request #" + n + ": " + (last || "closed") + (/^Finished/.test(last) ? "\nReload this page in about a minute to see the new picks." : ""));
+      } else {
+        say("Request #" + n + ": " + (last || "waiting for the laptop to pick it up…"));
+        pollTimer = setTimeout(() => watchIssue(n, ticks + 1), 20000);
+      }
+    })).catch(() => { pollTimer = setTimeout(() => watchIssue(n, ticks + 1), 30000); });
+}
+
+function setSide(s){
+  side = s; selIdx = 0; shown = PAGE; secs();
+  $("bCalls").setAttribute("aria-pressed", s === "calls");
+  $("bPuts").setAttribute("aria-pressed", s === "puts");
+  draw(); detail(); list();
+}
+
+$("bCalls").onclick = () => setSide("calls");
+$("bPuts").onclick = () => setSide("puts");
+$("more").onclick = () => { shown += PAGE; list(); };
+let qTimer;
+$("q").oninput = () => { clearTimeout(qTimer); qTimer = setTimeout(() => { qSel = $("q").value.trim().toUpperCase(); refresh(); }, 250); };
+$("searchForm").onsubmit = e => { e.preventDefault(); clearTimeout(qTimer); qSel = $("q").value.trim().toUpperCase(); $("q").blur(); refresh(); };
+$("sortBy").onchange = () => { sortKey = $("sortBy").value; sortDir = METRICS[sortKey][3]; refresh(); };
+$("sortDir").onclick = () => { sortDir = -sortDir; refresh(); };
+$("bZoom").onclick = () => setPan(!zoom);
+$("bIn").onclick = () => zoomBy(0.5);
+$("bOut").onclick = () => zoomBy(2);
+$("bReset").onclick = resetView;
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+// Phones fire resize events when the address bar moves; only redraw when the width really changed (e.g. rotation).
+let rz; window.addEventListener("resize", () => {
+  clearTimeout(rz);
+  rz = setTimeout(() => { if (Math.abs($("chart").clientWidth - lastW) > 30) draw(); }, 250);
+});
+
+header(); secs(); sortUI(); runPanel(); runs();
+if (!DATA.calls.length && DATA.puts.length) side = "puts";
+setSide(side);
+</script>
+</body>
+</html>
